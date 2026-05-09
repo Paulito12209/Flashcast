@@ -43,7 +43,7 @@ function StandardCardQuiz({
 }) {
   const [revealed, setRevealed] = useState(false);
 
-  const frontMd = `# ${card.front}\n\n---\n\n*${t(language, "reveal")}*`;
+  const frontMd = `# ${card.front}\n\n---\n\n*${t(language, "reveal.hint")}*`;
 
   const backMd = `# ${card.front}\n\n---\n\n## ${t(language, "answer")}\n\n**${card.back}**`;
 

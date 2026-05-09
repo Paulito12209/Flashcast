@@ -5,7 +5,7 @@
   "description": "Karteikarten schnell erstellen und lernen mit Markdown-Syntax",
   "icon": "extension-icon.png",
   "author": "Paul12169",
-  "categories": ["Productivity", "Learning"],
+  "categories": ["Productivity", "Other"],
   "license": "MIT",
   "commands": [
     {

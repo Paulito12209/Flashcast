@@ -106,3 +106,41 @@ function parseMC(
     tags,
   };
 }
+
+/**
+ * Parst eine Markdown-Datei mit mehreren Karteikarten.
+ *
+ * Karten werden durch eine Zeile mit genau "---" getrennt.
+ * Der Platzhalter "-" (= keine Tags) wird vor dem Parsen entfernt.
+ * Leere Blöcke werden übersprungen.
+ */
+export function parseMultipleCards(input: string): Omit<Flashcard, "id" | "progress" | "createdAt">[] {
+  // An --- Trennlinien aufteilen (nur wenn --- allein auf einer Zeile steht)
+  const blocks = input.split(/\n[ \t]*---[ \t]*\n/);
+
+  const results: Omit<Flashcard, "id" | "progress" | "createdAt">[] = [];
+
+  for (const raw of blocks) {
+    // Block bereinigen
+    let block = raw.trim();
+    if (!block) continue;
+
+    // Platzhalter "-" als letzte Zeile entfernen (= "keine Tags")
+    const lines = block.split("\n");
+    const lastLine = lines[lines.length - 1]?.trim() ?? "";
+    if (lastLine === "-") {
+      block = lines.slice(0, -1).join("\n").trim();
+    }
+
+    // Leeren Block nach Bereinigung überspringen
+    if (!block) continue;
+
+    try {
+      results.push(parseMarkdown(block));
+    } catch {
+      // Fehlerhafte Blöcke überspringen, damit der Rest importiert wird
+    }
+  }
+
+  return results;
+}

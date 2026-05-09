@@ -118,7 +118,32 @@ export const translations: Record<Language, Record<string, string>> = {
     "untagged": "Untagged",
     "cards.untagged": "Cards without tag",
     "show": "Show",
-    "no.cards.tag": "No cards for this tag"
+    "no.cards.tag": "No cards for this tag",
+
+    "import.title": "Import Cards",
+    "import.paste.title": "Paste Markdown",
+    "import.paste.placeholder": "Paste your Markdown content here…",
+    "import.paste.info": "Separate cards with --- on its own line. Use - for no tags.",
+    "import.file.title": "Select File",
+    "import.file.placeholder": "Choose a .md file…",
+    "import.success": "Cards imported!",
+    "import.count": "{n} cards imported",
+    "import.error": "Import error",
+    "import.empty": "No cards found in input.",
+    "import.btn": "Import",
+    "import.mode": "Import Mode",
+    "import.mode.paste": "Paste Markdown",
+    "import.mode.file": "From File",
+    "export.title": "Export Cards",
+    "export.clipboard": "Copy to Clipboard",
+    "export.file": "Save as File",
+    "export.success": "Exported!",
+    "export.copied": "Markdown copied to clipboard",
+    "export.saved": "File saved",
+    "export.empty": "No cards to export.",
+    "export.count": "{n} cards exported",
+    "export.preview": "Preview",
+    "export.all": "Export all cards"
   },
   de: {
     "syntax.standard.title": "— Standard-Karte —",
@@ -237,7 +262,32 @@ export const translations: Record<Language, Record<string, string>> = {
     "untagged": "Ohne Tag",
     "cards.untagged": "Karten ohne Tag",
     "show": "Anzeigen",
-    "no.cards.tag": "Keine Karten für diesen Tag"
+    "no.cards.tag": "Keine Karten für diesen Tag",
+
+    "import.title": "Karten importieren",
+    "import.paste.title": "Markdown einfügen",
+    "import.paste.placeholder": "Markdown-Inhalt hier einfügen…",
+    "import.paste.info": "Karten mit --- auf einer eigenen Zeile trennen. - für keine Tags.",
+    "import.file.title": "Datei auswählen",
+    "import.file.placeholder": "Eine .md-Datei auswählen…",
+    "import.success": "Karten importiert!",
+    "import.count": "{n} Karten importiert",
+    "import.error": "Import-Fehler",
+    "import.empty": "Keine Karten im Eingabetext gefunden.",
+    "import.btn": "Importieren",
+    "import.mode": "Import-Modus",
+    "import.mode.paste": "Markdown einfügen",
+    "import.mode.file": "Aus Datei",
+    "export.title": "Karten exportieren",
+    "export.clipboard": "In Zwischenablage kopieren",
+    "export.file": "Als Datei speichern",
+    "export.success": "Exportiert!",
+    "export.copied": "Markdown in die Zwischenablage kopiert",
+    "export.saved": "Datei gespeichert",
+    "export.empty": "Keine Karten zum Exportieren.",
+    "export.count": "{n} Karten exportiert",
+    "export.preview": "Vorschau",
+    "export.all": "Alle Karten exportieren"
   },
   es: {
     "save.btn": "Guardar Tarjeta", "cancel": "Cancelar", "refresh": "Actualizar", "delete.btn": "Eliminar", 
@@ -293,7 +343,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "Etiquetas eliminadas.", "already.used": "Ya usado: ", "no.tags.created": "No hay etiquetas.",
     "tags.input.info": "Introduce etiquetas con #", "existing.tags": "Etiquetas existentes", 
     "tips.text": "• Las etiquetas empiezan por #\n• Separar por espacios\n• Se ignora mayúsculas",
-    "no.tags.desc": "Añadir etiquetas con #", "tags": "Etiquetas", "no.cards.tag": "No hay tarjetas"
+    "no.tags.desc": "Añadir etiquetas con #", "tags": "Etiquetas", "no.cards.tag": "No hay tarjetas",
+    "import.title": "Importar tarjetas", "import.paste.title": "Pegar Markdown", "import.paste.placeholder": "Pega tu contenido Markdown aquí…",
+    "import.paste.info": "Separa tarjetas con --- en su propia línea.", "import.file.title": "Seleccionar archivo", "import.file.placeholder": "Elige un archivo .md…",
+    "import.success": "¡Tarjetas importadas!", "import.count": "{n} tarjetas importadas", "import.error": "Error de importación",
+    "import.empty": "No se encontraron tarjetas.", "import.btn": "Importar", "import.mode": "Modo de importación",
+    "import.mode.paste": "Pegar Markdown", "import.mode.file": "Desde archivo",
+    "export.title": "Exportar tarjetas", "export.clipboard": "Copiar al portapapeles", "export.file": "Guardar como archivo",
+    "export.success": "¡Exportado!", "export.copied": "Markdown copiado", "export.saved": "Archivo guardado",
+    "export.empty": "No hay tarjetas para exportar.", "export.count": "{n} tarjetas exportadas", "export.preview": "Vista previa", "export.all": "Exportar todas"
   },
   zh: {
     "save.btn": "保存卡片", "cancel": "取消", "refresh": "刷新", "delete.btn": "删除", 
@@ -349,7 +407,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "所有标签已移除。", "already.used": "已使用: ", "no.tags.created": "尚未创建标签。",
     "tags.input.info": "输入带有#的标签", "existing.tags": "现有标签", 
     "tips.text": "• 标签以#开头\n• 用空格分隔多个标签\n• 忽略大小写",
-    "no.tags.desc": "在卡片末尾添加标签。", "tags": "标签", "no.cards.tag": "此标签没有卡片"
+    "no.tags.desc": "在卡片末尾添加标签。", "tags": "标签", "no.cards.tag": "此标签没有卡片",
+    "import.title": "导入卡片", "import.paste.title": "粘贴Markdown", "import.paste.placeholder": "在此粘贴Markdown内容…",
+    "import.paste.info": "用---分隔卡片。", "import.file.title": "选择文件", "import.file.placeholder": "选择.md文件…",
+    "import.success": "卡片已导入！", "import.count": "已导入{n}张卡片", "import.error": "导入错误",
+    "import.empty": "未找到卡片。", "import.btn": "导入", "import.mode": "导入模式",
+    "import.mode.paste": "粘贴Markdown", "import.mode.file": "从文件导入",
+    "export.title": "导出卡片", "export.clipboard": "复制到剪贴板", "export.file": "保存为文件",
+    "export.success": "已导出！", "export.copied": "Markdown已复制", "export.saved": "文件已保存",
+    "export.empty": "没有可导出的卡片。", "export.count": "已导出{n}张卡片", "export.preview": "预览", "export.all": "导出所有卡片"
   },
   hi: {
     "save.btn": "फ़्लैशकार्ड सहेजें", "cancel": "रद्द करें", "refresh": "रीफ्रेश", "delete.btn": "हटाएं", 
@@ -405,7 +471,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "सभी टैग हटा दिए गए।", "already.used": "पहले से प्रयुक्त: ", "no.tags.created": "कोई टैग नहीं।",
     "tags.input.info": "# के साथ टैग दर्ज करें", "existing.tags": "मौजूदा टैग", 
     "tips.text": "• टैग # से शुरू होते हैं\n• रिक्त स्थान द्वारा अलग करें",
-    "no.tags.desc": "कार्ड के अंत में टैग जोड़ें।", "tags": "टैग", "no.cards.tag": "इस टैग के लिए कोई कार्ड नहीं"
+    "no.tags.desc": "कार्ड के अंत में टैग जोड़ें।", "tags": "टैग", "no.cards.tag": "इस टैग के लिए कोई कार्ड नहीं",
+    "import.title": "कार्ड आयात करें", "import.paste.title": "Markdown चिपकाएं", "import.paste.placeholder": "अपना Markdown यहाँ चिपकाएं…",
+    "import.paste.info": "--- से कार्ड अलग करें।", "import.file.title": "फ़ाइल चुनें", "import.file.placeholder": ".md फ़ाइल चुनें…",
+    "import.success": "कार्ड आयातित!", "import.count": "{n} कार्ड आयातित", "import.error": "आयात त्रुटि",
+    "import.empty": "कोई कार्ड नहीं मिला।", "import.btn": "आयात", "import.mode": "आयात मोड",
+    "import.mode.paste": "Markdown चिपकाएं", "import.mode.file": "फ़ाइल से",
+    "export.title": "कार्ड निर्यात करें", "export.clipboard": "क्लिपबोर्ड पर कॉपी करें", "export.file": "फ़ाइल के रूप में सहेजें",
+    "export.success": "निर्यातित!", "export.copied": "Markdown कॉपी किया गया", "export.saved": "फ़ाइल सहेजी गई",
+    "export.empty": "निर्यात के लिए कोई कार्ड नहीं।", "export.count": "{n} कार्ड निर्यातित", "export.preview": "पूर्वावलोकन", "export.all": "सभी कार्ड निर्यात करें"
   },
   ru: {
     "save.btn": "Сохранить", "cancel": "Отмена", "refresh": "Обновить", "delete.btn": "Удалить", 
@@ -461,7 +535,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "Все теги удалены.", "already.used": "Уже используется: ", "no.tags.created": "Тегов пока нет.",
     "tags.input.info": "Введите теги с #", "existing.tags": "Существующие теги", 
     "tips.text": "• Теги начинаются с #\n• Разделяйте пробелами\n• Регистр не важен",
-    "no.tags.desc": "Добавьте теги в конце карточки.", "tags": "Теги", "no.cards.tag": "Нет карточек с этим тегом"
+    "no.tags.desc": "Добавьте теги в конце карточки.", "tags": "Теги", "no.cards.tag": "Нет карточек с этим тегом",
+    "import.title": "Импорт карточек", "import.paste.title": "Вставить Markdown", "import.paste.placeholder": "Вставьте Markdown здесь…",
+    "import.paste.info": "Разделяйте карточки через ---.", "import.file.title": "Выбрать файл", "import.file.placeholder": "Выберите .md файл…",
+    "import.success": "Карточки импортированы!", "import.count": "{n} карточек импортировано", "import.error": "Ошибка импорта",
+    "import.empty": "Карточки не найдены.", "import.btn": "Импорт", "import.mode": "Режим импорта",
+    "import.mode.paste": "Вставить Markdown", "import.mode.file": "Из файла",
+    "export.title": "Экспорт карточек", "export.clipboard": "Копировать в буфер", "export.file": "Сохранить как файл",
+    "export.success": "Экспортировано!", "export.copied": "Markdown скопирован", "export.saved": "Файл сохранен",
+    "export.empty": "Нет карточек для экспорта.", "export.count": "{n} карточек экспортировано", "export.preview": "Просмотр", "export.all": "Экспортировать все"
   },
   ar: {
     "save.btn": "حفظ", "cancel": "إلغاء", "refresh": "تحديث", "delete.btn": "حذف", 
@@ -517,7 +599,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "تم إزالة جميع العلامات.", "already.used": "مستخدم بالفعل: ", "no.tags.created": "لم يتم إنشاء علامات.",
     "tags.input.info": "أدخل العلامات مع #", "existing.tags": "العلامات الحالية", 
     "tips.text": "• تبدأ العلامات بـ #\n• افصل بمسافات",
-    "no.tags.desc": "أضف علامات في نهاية البطاقة.", "tags": "علامات", "no.cards.tag": "لا توجد بطاقات لهذه العلامة"
+    "no.tags.desc": "أضف علامات في نهاية البطاقة.", "tags": "علامات", "no.cards.tag": "لا توجد بطاقات لهذه العلامة",
+    "import.title": "استيراد بطاقات", "import.paste.title": "لصق Markdown", "import.paste.placeholder": "الصق محتوى Markdown هنا…",
+    "import.paste.info": "افصل البطاقات بـ ---.", "import.file.title": "اختر ملف", "import.file.placeholder": "اختر ملف .md…",
+    "import.success": "تم استيراد البطاقات!", "import.count": "تم استيراد {n} بطاقات", "import.error": "خطأ في الاستيراد",
+    "import.empty": "لم يتم العثور على بطاقات.", "import.btn": "استيراد", "import.mode": "وضع الاستيراد",
+    "import.mode.paste": "لصق Markdown", "import.mode.file": "من ملف",
+    "export.title": "تصدير بطاقات", "export.clipboard": "نسخ إلى الحافظة", "export.file": "حفظ كملف",
+    "export.success": "تم التصدير!", "export.copied": "تم نسخ Markdown", "export.saved": "تم حفظ الملف",
+    "export.empty": "لا توجد بطاقات للتصدير.", "export.count": "تم تصدير {n} بطاقات", "export.preview": "معاينة", "export.all": "تصدير الكل"
   },
   pt: {
     "save.btn": "Salvar", "cancel": "Cancelar", "refresh": "Atualizar", "delete.btn": "Excluir", 
@@ -573,7 +663,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "Todas as tags removidas.", "already.used": "Já em uso: ", "no.tags.created": "Nenhuma tag.",
     "tags.input.info": "Insira tags com #", "existing.tags": "Tags existentes", 
     "tips.text": "• Tags começam com #\n• Separe com espaços",
-    "no.tags.desc": "Adicione tags no final do cartão.", "tags": "Tags", "no.cards.tag": "Nenhum cartão para esta tag"
+    "no.tags.desc": "Adicione tags no final do cartão.", "tags": "Tags", "no.cards.tag": "Nenhum cartão para esta tag",
+    "import.title": "Importar cartões", "import.paste.title": "Colar Markdown", "import.paste.placeholder": "Cole seu Markdown aqui…",
+    "import.paste.info": "Separe cartões com ---.", "import.file.title": "Selecionar arquivo", "import.file.placeholder": "Escolha um arquivo .md…",
+    "import.success": "Cartões importados!", "import.count": "{n} cartões importados", "import.error": "Erro de importação",
+    "import.empty": "Nenhum cartão encontrado.", "import.btn": "Importar", "import.mode": "Modo de importação",
+    "import.mode.paste": "Colar Markdown", "import.mode.file": "De arquivo",
+    "export.title": "Exportar cartões", "export.clipboard": "Copiar para área de transferência", "export.file": "Salvar como arquivo",
+    "export.success": "Exportado!", "export.copied": "Markdown copiado", "export.saved": "Arquivo salvo",
+    "export.empty": "Nenhum cartão para exportar.", "export.count": "{n} cartões exportados", "export.preview": "Prévia", "export.all": "Exportar todos"
   },
   it: {
     "save.btn": "Salva", "cancel": "Annulla", "refresh": "Aggiorna", "delete.btn": "Elimina", 
@@ -629,7 +727,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "Tutti i tag rimossi.", "already.used": "Già usato: ", "no.tags.created": "Nessun tag creato.",
     "tags.input.info": "Inserisci tag con #", "existing.tags": "Tag esistenti", 
     "tips.text": "• I tag iniziano con #\n• Separa con spazi",
-    "no.tags.desc": "Aggiungi tag alla fine della carta.", "tags": "Tag", "no.cards.tag": "Nessuna carta per questo tag"
+    "no.tags.desc": "Aggiungi tag alla fine della carta.", "tags": "Tag", "no.cards.tag": "Nessuna carta per questo tag",
+    "import.title": "Importa carte", "import.paste.title": "Incolla Markdown", "import.paste.placeholder": "Incolla il tuo Markdown qui…",
+    "import.paste.info": "Separa le carte con ---.", "import.file.title": "Seleziona file", "import.file.placeholder": "Scegli un file .md…",
+    "import.success": "Carte importate!", "import.count": "{n} carte importate", "import.error": "Errore di importazione",
+    "import.empty": "Nessuna carta trovata.", "import.btn": "Importa", "import.mode": "Modalità importazione",
+    "import.mode.paste": "Incolla Markdown", "import.mode.file": "Da file",
+    "export.title": "Esporta carte", "export.clipboard": "Copia negli appunti", "export.file": "Salva come file",
+    "export.success": "Esportato!", "export.copied": "Markdown copiato", "export.saved": "File salvato",
+    "export.empty": "Nessuna carta da esportare.", "export.count": "{n} carte esportate", "export.preview": "Anteprima", "export.all": "Esporta tutte"
   },
   tr: {
     "save.btn": "Kaydet", "cancel": "İptal", "refresh": "Yenile", "delete.btn": "Sil", 
@@ -685,7 +791,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "all.tags.removed": "Tüm etiketler kaldırıldı.", "already.used": "Zaten kullanılıyor: ", "no.tags.created": "Etiket yok.",
     "tags.input.info": "# ile etiket girin", "existing.tags": "Mevcut Etiketler", 
     "tips.text": "• Etiketler # ile başlar\n• Boşluklarla ayırın",
-    "no.tags.desc": "Kartın sonuna etiket ekleyin.", "tags": "Etiketler", "no.cards.tag": "Bu etiket için kart yok"
+    "no.tags.desc": "Kartın sonuna etiket ekleyin.", "tags": "Etiketler", "no.cards.tag": "Bu etiket için kart yok",
+    "import.title": "Kartları içe aktar", "import.paste.title": "Markdown yapıştır", "import.paste.placeholder": "Markdown içeriğini buraya yapıştırın…",
+    "import.paste.info": "Kartları --- ile ayırın.", "import.file.title": "Dosya seç", "import.file.placeholder": ".md dosyası seçin…",
+    "import.success": "Kartlar içe aktarıldı!", "import.count": "{n} kart içe aktarıldı", "import.error": "İçe aktarma hatası",
+    "import.empty": "Kart bulunamadı.", "import.btn": "İçe aktar", "import.mode": "İçe aktarma modu",
+    "import.mode.paste": "Markdown yapıştır", "import.mode.file": "Dosyadan",
+    "export.title": "Kartları dışa aktar", "export.clipboard": "Panoya kopyala", "export.file": "Dosya olarak kaydet",
+    "export.success": "Dışa aktarıldı!", "export.copied": "Markdown kopyalandı", "export.saved": "Dosya kaydedildi",
+    "export.empty": "Dışa aktarılacak kart yok.", "export.count": "{n} kart dışa aktarıldı", "export.preview": "Önizleme", "export.all": "Tümünü dışa aktar"
   }
 };
 

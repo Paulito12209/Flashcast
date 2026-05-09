@@ -24,6 +24,10 @@ declare namespace Preferences {
   export type Tags = ExtensionPreferences & {}
   /** Preferences accessible in the `quiz` command */
   export type Quiz = ExtensionPreferences & {}
+  /** Preferences accessible in the `import-cards` command */
+  export type ImportCards = ExtensionPreferences & {}
+  /** Preferences accessible in the `export-cards` command */
+  export type ExportCards = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -35,5 +39,9 @@ declare namespace Arguments {
   export type Tags = {}
   /** Arguments passed to the `quiz` command */
   export type Quiz = {}
+  /** Arguments passed to the `import-cards` command */
+  export type ImportCards = {}
+  /** Arguments passed to the `export-cards` command */
+  export type ExportCards = {}
 }
 

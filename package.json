@@ -35,6 +35,20 @@
       "subtitle": "Flashcards",
       "description": "Study your flashcards with a quiz",
       "mode": "view"
+    },
+    {
+      "name": "import-cards",
+      "title": "Import",
+      "subtitle": "Flashcards",
+      "description": "Import flashcards from a Markdown file or text",
+      "mode": "view"
+    },
+    {
+      "name": "export-cards",
+      "title": "Export",
+      "subtitle": "Flashcards",
+      "description": "Export flashcards as Markdown",
+      "mode": "view"
     }
   ],
   "preferences": [

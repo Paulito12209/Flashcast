@@ -38,8 +38,9 @@ export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" 
   let contentLines = lines;
 
   const lastLine = lines[lines.length - 1]?.trim() ?? "";
-  if (/^(#\w+\s*)+$/.test(lastLine)) {
-    tags = (lastLine.match(/#(\w+)/g) ?? []).map((t) => t.slice(1).toLowerCase());
+  // Unicode-taugliches Regex: erkennt auch Umlaute, Akzente etc. in Tags
+  if (/^(#[\p{L}\p{N}_]+\s*)+$/u.test(lastLine)) {
+    tags = (lastLine.match(/#([\p{L}\p{N}_]+)/gu) ?? []).map((t) => t.slice(1).toLowerCase());
     contentLines = lines.slice(0, -1);
   }
 

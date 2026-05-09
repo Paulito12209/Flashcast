@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 type ExtensionPreferences = {
-  /** Sprache / Language - Sprache der Extension (betrifft die Syntax für richtig/true) */
+  /** Language - Language of the extension (affects syntax for correct/true) */
   "language": "de" | "en" | "es" | "zh" | "hi" | "ru" | "ar" | "pt" | "it" | "tr"
 }
 

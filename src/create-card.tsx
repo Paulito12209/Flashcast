@@ -4,7 +4,7 @@ import { saveCard } from "./utils/storage";
 import { Flashcard, Preferences } from "./types";
 
 const SYNTAX_DE = [
-  "── Standard-Karte ──────────────────────────────────────────────",
+  "── Standard-Karte ─────────────────",
   "1. Titel eingeben             → z.B. \"Photosynthese\"",
   "2. Leerzeile + == + Leerzeile → Trenner zwischen Vorder- und Rückseite",
   "3. Antwort eingeben           → z.B. \"Prozess, bei dem Pflanzen...\"",
@@ -19,7 +19,7 @@ const SYNTAX_DE = [
   "",
   "  #biologie #schule",
   "",
-  "── Multiple-Choice-Karte ────────────────────────────────────────",
+  "── Multiple-Choice-Karte ──────────",
   "1. Frage eingeben",
   "2. ==< als Trenner (statt ==)",
   "3. Optionen im Format  1: Text  2: Text  3: Text",
@@ -42,7 +42,7 @@ const SYNTAX_DE = [
   "",
   "  #geschichte #politik",
   "",
-  "── Tag-Kategorien (Beispiele) ──────────────────────────────────",
+  "── Tag-Kategorien (Beispiele) ─────",
   "  #vokabular   – Fremdwörter & Begriffe",
   "  #grammatik   – Sprachregeln",
   "  #unternehmen – Firmen & Marken",
@@ -52,7 +52,7 @@ const SYNTAX_DE = [
 ].join("\n");
 
 const SYNTAX_EN = [
-  "── Standard card ───────────────────────────────────────────────",
+  "── Standard card ──────────────────",
   "1. Enter the title            → e.g. \"Photosynthesis\"",
   "2. Blank line + == + blank    → separator between front and back",
   "3. Enter the answer           → e.g. \"Process in which plants...\"",
@@ -67,7 +67,7 @@ const SYNTAX_EN = [
   "",
   "  #biology #school",
   "",
-  "── Multiple-choice card ────────────────────────────────────────",
+  "── Multiple-choice card ───────────",
   "1. Enter the question",
   "2. ==< as separator (instead of ==)",
   "3. Options in format  1: Text  2: Text  3: Text",
@@ -90,7 +90,7 @@ const SYNTAX_EN = [
   "",
   "  #history #politics",
   "",
-  "── Tag categories (examples) ───────────────────────────────────",
+  "── Tag categories (examples) ──────",
   "  #vocabulary  – Words & Terms",
   "  #grammar     – Language Rules",
   "  #companies   – Brands & Organizations",

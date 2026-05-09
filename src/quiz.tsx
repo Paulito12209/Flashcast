@@ -13,6 +13,7 @@ import {
 import { useEffect, useState, useCallback } from "react";
 import { Flashcard, Preferences } from "./types";
 import { getAllCards, getAllTags, updateProgress } from "./utils/storage";
+import { t } from "./utils/i18n";
 
 // ── Hilfsfunktionen ───────────────────────────────────────────────────────────
 
@@ -31,43 +32,43 @@ function StandardCardQuiz({
   card,
   index,
   total,
-  isDE,
+  language,
   onAnswer,
 }: {
   card: Flashcard;
   index: number;
   total: number;
-  isDE: boolean;
+  language: string;
   onAnswer: (correct: boolean) => void;
 }) {
   const [revealed, setRevealed] = useState(false);
 
-  const frontMd = `# ${card.front}\n\n---\n\n*${isDE ? "Drücke Enter zum Aufdecken" : "Press Enter to reveal"}*`;
+  const frontMd = `# ${card.front}\n\n---\n\n*${t(language, "reveal")}*`;
 
-  const backMd = `# ${card.front}\n\n---\n\n## ${isDE ? "Antwort" : "Answer"}\n\n**${card.back}**`;
+  const backMd = `# ${card.front}\n\n---\n\n## ${t(language, "answer")}\n\n**${card.back}**`;
 
   return (
     <Detail
-      navigationTitle={`${isDE ? "Karte" : "Card"} ${index + 1} / ${total}`}
+      navigationTitle={`${t(language, "card")} ${index + 1} / ${total}`}
       markdown={revealed ? backMd : frontMd}
       actions={
         <ActionPanel>
           {!revealed ? (
             <Action
-              title={isDE ? "Aufdecken" : "Reveal"}
+              title={t(language, "reveal")}
               icon={Icon.Eye}
               onAction={() => setRevealed(true)}
             />
           ) : (
             <>
               <Action
-                title={isDE ? "Richtig ✓" : "Correct ✓"}
+                title={t(language, "correct.btn")}
                 icon={{ source: Icon.CheckCircle, tintColor: Color.Green }}
                 shortcut={{ modifiers: [], key: "arrowRight" }}
                 onAction={() => onAnswer(true)}
               />
               <Action
-                title={isDE ? "Falsch ✗" : "Wrong ✗"}
+                title={t(language, "wrong.btn")}
                 icon={{ source: Icon.XMarkCircle, tintColor: Color.Red }}
                 shortcut={{ modifiers: [], key: "arrowLeft" }}
                 onAction={() => onAnswer(false)}
@@ -86,13 +87,13 @@ function MCCardQuiz({
   card,
   index,
   total,
-  isDE,
+  language,
   onAnswer,
 }: {
   card: Flashcard;
   index: number;
   total: number;
-  isDE: boolean;
+  language: string;
   onAnswer: (correct: boolean) => void;
 }) {
   const [selected, setSelected] = useState<number | null>(null);
@@ -115,22 +116,22 @@ function MCCardQuiz({
   }
 
   const questionMd = isAnswered
-    ? `# ${card.front}\n\n---\n\n${isCorrect ? "✅ " + (isDE ? "Richtig!" : "Correct!") : "❌ " + (isDE ? "Falsch!" : "Wrong!")}`
+    ? `# ${card.front}\n\n---\n\n${isCorrect ? "✅ " + t(language, "correct.msg") : "❌ " + t(language, "wrong.msg")}`
     : `# ${card.front}`;
 
   return (
     <List
-      navigationTitle={`${isDE ? "Karte" : "Card"} ${index + 1} / ${total}`}
+      navigationTitle={`${t(language, "card")} ${index + 1} / ${total}`}
       isShowingDetail
     >
-      <List.Section title={isDE ? "Frage" : "Question"}>
+      <List.Section title={t(language, "question")}>
         <List.Item
           title={card.front}
           detail={<List.Item.Detail markdown={questionMd} />}
         />
       </List.Section>
 
-      <List.Section title={isDE ? "Antwortmöglichkeiten" : "Options"}>
+      <List.Section title={t(language, "options")}>
         {(card.options ?? []).map((opt) => (
           <List.Item
             key={opt.id}
@@ -138,21 +139,21 @@ function MCCardQuiz({
             title={`${opt.id}. ${opt.text}`}
             accessories={
               isAnswered && opt.id === card.correctOption
-                ? [{ tag: { value: isDE ? "Richtig" : "Correct", color: Color.Green } }]
+                ? [{ tag: { value: t(language, "correct.msg").replace("!", ""), color: Color.Green } }]
                 : isAnswered && opt.id === selected
-                ? [{ tag: { value: isDE ? "Falsch" : "Wrong", color: Color.Red } }]
+                ? [{ tag: { value: t(language, "wrong.msg").replace("!", ""), color: Color.Red } }]
                 : []
             }
             actions={
               <ActionPanel>
                 {!isAnswered ? (
                   <Action
-                    title={isDE ? `Option ${opt.id} wählen` : `Choose option ${opt.id}`}
+                    title={`${t(language, "choose.opt")} ${opt.id}`}
                     onAction={() => setSelected(opt.id)}
                   />
                 ) : (
                   <Action
-                    title={isDE ? "Weiter →" : "Next →"}
+                    title={t(language, "next")}
                     icon={Icon.ArrowRight}
                     onAction={() => onAnswer(isCorrect)}
                   />
@@ -168,7 +169,7 @@ function MCCardQuiz({
 
 // ── Quiz-Session ──────────────────────────────────────────────────────────────
 
-function QuizSession({ cards, isDE }: { cards: Flashcard[]; isDE: boolean }) {
+function QuizSession({ cards, language }: { cards: Flashcard[]; language: string }) {
   const [queue] = useState(() => shuffle(cards));
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState({ correct: 0, wrong: 0 });
@@ -183,7 +184,7 @@ function QuizSession({ cards, isDE }: { cards: Flashcard[]; isDE: boolean }) {
 
     await showToast({
       style: correct ? Toast.Style.Success : Toast.Style.Failure,
-      title: correct ? (isDE ? "Richtig! ✓" : "Correct! ✓") : (isDE ? "Falsch ✗" : "Wrong ✗"),
+      title: correct ? t(language, "correct.btn") : t(language, "wrong.btn"),
     });
 
     if (index + 1 >= queue.length) {
@@ -197,27 +198,27 @@ function QuizSession({ cards, isDE }: { cards: Flashcard[]; isDE: boolean }) {
     const total = queue.length;
     const pct = Math.round((results.correct / total) * 100);
     const emoji = pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "💪";
-    const summaryMd = `# ${emoji} ${isDE ? "Quiz abgeschlossen!" : "Quiz complete!"}
+    const summaryMd = `# ${emoji} ${t(language, "quiz.done")}
 
 ---
 
 | | |
 |---|---|
-| ${isDE ? "Richtig" : "Correct"} | **${results.correct} / ${total}** |
-| ${isDE ? "Falsch" : "Wrong"} | **${results.wrong} / ${total}** |
-| ${isDE ? "Ergebnis" : "Score"} | **${pct}%** |
+| ${t(language, "correct.msg").replace("!", "")} | **${results.correct} / ${total}** |
+| ${t(language, "wrong.msg").replace("!", "")} | **${results.wrong} / ${total}** |
+| ${t(language, "score")} | **${pct}%** |
 
 ---
 
-*${isDE ? "Fortschritt wurde gespeichert." : "Progress has been saved."}*`;
+*${t(language, "progress.saved")}*`;
 
     return (
       <Detail
-        navigationTitle={isDE ? "Quiz beendet" : "Quiz done"}
+        navigationTitle={t(language, "quiz.done")}
         markdown={summaryMd}
         actions={
           <ActionPanel>
-            <Action title={isDE ? "Zurück" : "Back"} icon={Icon.ArrowLeft} onAction={pop} />
+            <Action title={t(language, "back")} icon={Icon.ArrowLeft} onAction={pop} />
           </ActionPanel>
         }
       />
@@ -227,9 +228,9 @@ function QuizSession({ cards, isDE }: { cards: Flashcard[]; isDE: boolean }) {
   if (!card) return null;
 
   return card.type === "standard" ? (
-    <StandardCardQuiz card={card} index={index} total={queue.length} isDE={isDE} onAnswer={handleAnswer} />
+    <StandardCardQuiz card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
   ) : (
-    <MCCardQuiz card={card} index={index} total={queue.length} isDE={isDE} onAnswer={handleAnswer} />
+    <MCCardQuiz card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
   );
 }
 
@@ -238,11 +239,11 @@ function QuizSession({ cards, isDE }: { cards: Flashcard[]; isDE: boolean }) {
 function TagSelector({
   allCards,
   tags,
-  isDE,
+  language,
 }: {
   allCards: Flashcard[];
   tags: string[];
-  isDE: boolean;
+  language: string;
 }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const { push } = useNavigation();
@@ -260,26 +261,26 @@ function TagSelector({
     const filtered =
       selected.size === 0
         ? allCards
-        : allCards.filter((c) => c.tags.some((t) => selected.has(t)));
+        : allCards.filter((c) => c.tags.some((tg) => selected.has(tg)));
 
     if (filtered.length === 0) {
       showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Keine Karten gefunden" : "No cards found",
+        title: t(language, "no.cards.found"),
       });
       return;
     }
-    push(<QuizSession cards={filtered} isDE={isDE} />);
+    push(<QuizSession cards={filtered} language={language} />);
   }
 
   return (
     <List
-      navigationTitle={isDE ? "Tags auswählen" : "Select tags"}
-      searchBarPlaceholder={isDE ? "Tags filtern…" : "Filter tags…"}
+      navigationTitle={t(language, "select.tags")}
+      searchBarPlaceholder={t(language, "filter.tags")}
     >
       <List.Section
-        title={isDE ? "Tags auswählen (mehrere möglich)" : "Select tags (multiple allowed)"}
-        subtitle={selected.size === 0 ? (isDE ? "Alle" : "All") : `${selected.size} ${isDE ? "ausgewählt" : "selected"}`}
+        title={t(language, "select.multiple")}
+        subtitle={selected.size === 0 ? t(language, "all") : `${selected.size} ${t(language, "selected")}`}
       >
         {tags.map((tag) => {
           const isSelected = selected.has(tag);
@@ -293,14 +294,12 @@ function TagSelector({
               actions={
                 <ActionPanel>
                   <Action
-                    title={isSelected ? (isDE ? "Abwählen" : "Deselect") : (isDE ? "Auswählen" : "Select")}
+                    title={isSelected ? t(language, "deselect") : t(language, "select")}
                     onAction={() => toggleTag(tag)}
                   />
                   <Action
                     title={
-                      isDE
-                        ? `Quiz starten (${selected.size === 0 ? "alle" : selected.size + " Tags"})`
-                        : `Start quiz (${selected.size === 0 ? "all" : selected.size + " tags"})`
+                      `${t(language, "start.quiz")} (${selected.size === 0 ? t(language, "all").toLowerCase() : selected.size + " " + t(language, "tags")})`
                     }
                     icon={Icon.Play}
                     onAction={startQuiz}
@@ -320,11 +319,11 @@ function TagSelector({
 function ModeSelector({
   allCards,
   tags,
-  isDE,
+  language,
 }: {
   allCards: Flashcard[];
   tags: string[];
-  isDE: boolean;
+  language: string;
 }) {
   const { push } = useNavigation();
 
@@ -335,77 +334,77 @@ function ModeSelector({
     if (wrongCards.length === 0) {
       showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Keine falschen Karten" : "No wrong cards",
-        message: isDE ? "Du hast noch keine Karte falsch beantwortet." : "You haven't answered any card wrong yet.",
+        title: t(language, "no.wrong"),
+        message: t(language, "no.wrong.msg"),
       });
       return;
     }
-    push(<QuizSession cards={wrongCards} isDE={isDE} />);
+    push(<QuizSession cards={wrongCards} language={language} />);
   }
 
   function startNewCards() {
     if (newCards.length === 0) {
       showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Keine neuen Karten" : "No new cards",
+        title: t(language, "no.new"),
       });
       return;
     }
-    push(<QuizSession cards={newCards} isDE={isDE} />);
+    push(<QuizSession cards={newCards} language={language} />);
   }
 
   function startByTag() {
-    push(<TagSelector allCards={allCards} tags={tags} isDE={isDE} />);
+    push(<TagSelector allCards={allCards} tags={tags} language={language} />);
   }
 
   function startAll() {
     if (allCards.length === 0) {
-      showToast({ style: Toast.Style.Failure, title: isDE ? "Keine Karten vorhanden" : "No cards available" });
+      showToast({ style: Toast.Style.Failure, title: t(language, "no.cards.avail") });
       return;
     }
-    push(<QuizSession cards={allCards} isDE={isDE} />);
+    push(<QuizSession cards={allCards} language={language} />);
   }
 
   return (
-    <List navigationTitle={isDE ? "Quiz-Modus wählen" : "Choose quiz mode"}>
-      <List.Section title={isDE ? "Modus auswählen" : "Select mode"}>
+    <List navigationTitle={t(language, "choose.mode")}>
+      <List.Section title={t(language, "select.mode")}>
         <List.Item
           icon={{ source: Icon.XMarkCircle, tintColor: Color.Red }}
-          title={isDE ? "Falsche Karten" : "Wrong cards"}
-          subtitle={`${wrongCards.length} ${isDE ? "Karten" : "cards"}`}
+          title={t(language, "wrong.cards")}
+          subtitle={`${wrongCards.length} ${t(language, "cards")}`}
           actions={
             <ActionPanel>
-              <Action title={isDE ? "Quiz starten" : "Start quiz"} icon={Icon.Play} onAction={startWrongCards} />
+              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startWrongCards} />
             </ActionPanel>
           }
         />
         <List.Item
           icon={{ source: Icon.Circle, tintColor: Color.SecondaryText }}
-          title={isDE ? "Neue Karten" : "New cards"}
-          subtitle={`${newCards.length} ${isDE ? "Karten" : "cards"}`}
+          title={t(language, "new.cards")}
+          subtitle={`${newCards.length} ${t(language, "cards")}`}
           actions={
             <ActionPanel>
-              <Action title={isDE ? "Quiz starten" : "Start quiz"} icon={Icon.Play} onAction={startNewCards} />
+              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startNewCards} />
             </ActionPanel>
           }
         />
         <List.Item
           icon={Icon.Tag}
-          title={isDE ? "Nach Tags" : "By tags"}
-          subtitle={isDE ? "Tags auswählen" : "Select tags"}
+          title={t(language, "by.tags")}
+          subtitle={t(language, "select.tags")}
           actions={
             <ActionPanel>
-              <Action title={isDE ? "Tags auswählen" : "Select tags"} icon={Icon.ArrowRight} onAction={startByTag} />
+              <Action title={t(language, "select.tags")} icon={Icon.ArrowRight} onAction={startByTag} />
             </ActionPanel>
           }
         />
         <List.Item
           icon={Icon.Book}
-          title={isDE ? "Alle Karten" : "All cards"}
-          subtitle={`${allCards.length} ${isDE ? "Karten" : "cards"}`}
+          title={t(language, "all.cards")}
+          subtitle={`${allCards.length} ${t(language, "cards")}`}
           actions={
             <ActionPanel>
-              <Action title={isDE ? "Quiz starten" : "Start quiz"} icon={Icon.Play} onAction={startAll} />
+              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startAll} />
             </ActionPanel>
           }
         />
@@ -421,7 +420,6 @@ export default function Quiz() {
   const [tags, setTags] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { language } = getPreferenceValues<Preferences>();
-  const isDE = language === "de";
   const { push } = useNavigation();
 
   useEffect(() => {
@@ -444,14 +442,14 @@ export default function Quiz() {
 
 | | |
 |---|---|
-| ${isDE ? "Gesamt" : "Total"} | **${allCards.length}** |
-| ${isDE ? "Neu" : "New"} | **${newCount}** |
-| ✓ ${isDE ? "Richtig" : "Correct"} | **${correctCount}** |
-| ✗ ${isDE ? "Falsch" : "Wrong"} | **${wrongCount}** |
+| ${t(language, "total")} | **${allCards.length}** |
+| ${t(language, "status.new")} | **${newCount}** |
+| ${t(language, "status.correct")} | **${correctCount}** |
+| ${t(language, "status.wrong")} | **${wrongCount}** |
 
 ---
 
-*${isDE ? "Drücke ⌘K um einen Modus zu wählen und das Quiz zu starten." : "Press ⌘K to choose a mode and start the quiz."}*`;
+*${t(language, "quiz.shortcut")}*`;
 
   return (
     <Detail
@@ -460,9 +458,9 @@ export default function Quiz() {
       actions={
         <ActionPanel>
           <Action
-            title={isDE ? "Quiz starten" : "Start quiz"}
+            title={t(language, "start.quiz")}
             icon={Icon.Play}
-            onAction={() => push(<ModeSelector allCards={allCards} tags={tags} isDE={isDE} />)}
+            onAction={() => push(<ModeSelector allCards={allCards} tags={tags} language={language} />)}
           />
         </ActionPanel>
       }

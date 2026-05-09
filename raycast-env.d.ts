@@ -9,7 +9,7 @@
 
 type ExtensionPreferences = {
   /** Sprache / Language - Sprache der Extension (betrifft die Syntax für richtig/true) */
-  "language": "de" | "en"
+  "language": "de" | "en" | "es" | "zh" | "hi" | "ru" | "ar" | "pt" | "it" | "tr"
 }
 
 /** Preferences accessible in all the extension's commands */

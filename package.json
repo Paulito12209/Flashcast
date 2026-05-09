@@ -47,7 +47,15 @@
       "default": "de",
       "data": [
         { "title": "Deutsch", "value": "de" },
-        { "title": "English", "value": "en" }
+        { "title": "English", "value": "en" },
+        { "title": "Español", "value": "es" },
+        { "title": "中文 (简体)", "value": "zh" },
+        { "title": "हिन्दी", "value": "hi" },
+        { "title": "Русский", "value": "ru" },
+        { "title": "العربية", "value": "ar" },
+        { "title": "Português", "value": "pt" },
+        { "title": "Italiano", "value": "it" },
+        { "title": "Türkçe", "value": "tr" }
       ]
     }
   ],

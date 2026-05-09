@@ -2,109 +2,10 @@ import { Form, ActionPanel, Action, showToast, Toast, getPreferenceValues, Icon,
 import { parseMarkdown } from "./utils/parser";
 import { saveCard } from "./utils/storage";
 import { Flashcard, Preferences } from "./types";
-
-// ── Standard-Karte: Schritte ──────────────────────────────────────────────────
-const STEPS_DE = [
-  "— Standard-Karte —",
-  "1. Titel eingeben",
-  "2. Enter + == + Enter  (= Trenner Vorder-/Rückseite)",
-  "3. Antwort eingeben + Enter",
-  "4. Tags anhängen  (optional, Leerzeichen zwischen Tags, alles klein)",
-].join("\n");
-
-const STEPS_EN = [
-  "— Standard card —",
-  "1. Enter the title",
-  "2. Enter + == + Enter  (= separator front/back)",
-  "3. Enter the answer + Enter",
-  "4. Add tags  (optional, space between tags, always lowercase)",
-].join("\n");
-
-// ── Standard-Karte: Beispiel (einzutippender Text) ────────────────────────────
-const EXAMPLE_DE = [
-  "Photosynthese",
-  "==",
-  "Prozess, bei dem Pflanzen aus Licht und CO₂ Zucker herstellen.",
-  "#biologie #schule",
-].join("\n");
-
-const EXAMPLE_EN = [
-  "Photosynthesis",
-  "==",
-  "Process by which plants convert light and CO₂ into sugar.",
-  "#biology #school",
-].join("\n");
-
-// ── Multiple-Choice: Schritte ──────────────────────────────────────────────────
-const MC_STEPS_DE = [
-  "— Multiple-Choice-Karte —",
-  "1. Frage eingeben + Enter",
-  "2. ==< + Enter  (= Trenner zur Frage)",
-  "3. Optionen + Enter:  1: Text   2: Text   3: Text",
-  "4. -- + Enter  (= Trenner zur Antwort)",
-  "5. richtig: 2 + Enter",
-  "6. Tags anhängen  (optional, Leerzeichen zwischen Tags, alles klein)",
-].join("\n");
-
-const MC_STEPS_EN = [
-  "— Multiple-choice card —",
-  "1. Enter the question + Enter",
-  "2. ==< + Enter  (= separator)",
-  "3. Options + Enter:  1: Text   2: Text   3: Text",
-  "4. -- + Enter  (= separator to answer)",
-  "5. true: 2 + Enter",
-  "6. Add tags  (optional, space between tags, always lowercase)",
-].join("\n");
-
-// ── Multiple-Choice: Beispiel ─────────────────────────────────────────────────
-const MC_EXAMPLE_DE = [
-  "Wann wurde die EU gegründet?",
-  "==<",
-  "1: 1945",
-  "2: 1957",
-  "3: 1993",
-  "--",
-  "richtig: 2",
-  "#geschichte #politik",
-].join("\n");
-
-const MC_EXAMPLE_EN = [
-  "When was the EU founded?",
-  "==<",
-  "1: 1945",
-  "2: 1957",
-  "3: 1993",
-  "--",
-  "true: 2",
-  "#history #politics",
-].join("\n");
-
-// ── Tag-Kategorien ─────────────────────────────────────────────────────────────
-const TAGS_DE = [
-  "Tags immer klein schreiben  (z.B. #englisch statt #Englisch)",
-  "",
-  "#vokabular   – Fremdwörter & Begriffe",
-  "#grammatik   – Sprachregeln",
-  "#unternehmen – Firmen & Marken",
-  "#personen    – Wichtige Persönlichkeiten",
-  "#tools       – Software & Werkzeuge",
-  "#geschichte  – Historische Fakten",
-].join("\n");
-
-const TAGS_EN = [
-  "Always use lowercase tags  (e.g. #english not #English)",
-  "",
-  "#vocabulary  – Words & Terms",
-  "#grammar     – Language Rules",
-  "#companies   – Brands & Organizations",
-  "#persons     – Notable People",
-  "#tools       – Software & Utilities",
-  "#history     – Historical Facts",
-].join("\n");
+import { t } from "./utils/i18n";
 
 export default function CreateCard() {
   const { language } = getPreferenceValues<Preferences>();
-  const isDE = language === "de";
 
   async function handleSubmit(values: { markdown: string }) {
     const input = values.markdown?.trim();
@@ -112,8 +13,8 @@ export default function CreateCard() {
     if (!input) {
       await showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Eingabe fehlt" : "Input missing",
-        message: isDE ? "Bitte eine Karteikarte eingeben." : "Please enter a flashcard.",
+        title: t(language, "input.missing.title"),
+        message: t(language, "input.missing.msg"),
       });
       return;
     }
@@ -124,10 +25,8 @@ export default function CreateCard() {
       if (!parsed.front) {
         await showToast({
           style: Toast.Style.Failure,
-          title: isDE ? "Vorderseite fehlt" : "Front side missing",
-          message: isDE
-            ? "Die Karteikarte braucht mindestens eine Frage/einen Begriff."
-            : "The flashcard needs at least a question or term.",
+          title: t(language, "front.missing.title"),
+          message: t(language, "front.missing.msg"),
         });
         return;
       }
@@ -142,7 +41,7 @@ export default function CreateCard() {
       await saveCard(card);
       await showToast({
         style: Toast.Style.Success,
-        title: isDE ? "Karteikarte gespeichert!" : "Flashcard saved!",
+        title: t(language, "save.success"),
         message: `"${card.front}"`,
       });
       // Formular schließen und zurück zur Hauptansicht
@@ -150,7 +49,7 @@ export default function CreateCard() {
     } catch (e) {
       await showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Fehler beim Parsen" : "Parse error",
+        title: t(language, "parse.error"),
         message: String(e),
       });
     }
@@ -161,7 +60,7 @@ export default function CreateCard() {
       actions={
         <ActionPanel>
           <Action.SubmitForm
-            title={isDE ? "Karteikarte speichern" : "Save Flashcard"}
+            title={t(language, "save.btn")}
             icon={Icon.CheckCircle}
             onSubmit={handleSubmit}
           />
@@ -170,20 +69,31 @@ export default function CreateCard() {
     >
       <Form.TextArea
         id="markdown"
-        title={isDE ? "Karteikarte" : "Flashcard"}
-        placeholder={isDE ? "Titel\n==\nAntwort\n#tag" : "Title\n==\nAnswer\n#tag"}
-        info={isDE ? "Trennzeichen: == (Standard) oder ==< (Multiple Choice)" : "Separator: == (standard) or ==< (multiple choice)"}
+        title={t(language, "card.title")}
+        placeholder={t(language, "card.placeholder")}
+        info={t(language, "card.info")}
       />
       <Form.Separator />
 
       {/* ── Standard-Karte: Schritte ── */}
       <Form.Description
-        title={isDE ? "Syntax-Referenz" : "Syntax Reference"}
-        text={isDE ? STEPS_DE : STEPS_EN}
+        title={t(language, "syntax.ref")}
+        text={[
+          t(language, "syntax.standard.title"),
+          t(language, "syntax.standard.1"),
+          t(language, "syntax.standard.2"),
+          t(language, "syntax.standard.3"),
+          t(language, "syntax.standard.4"),
+        ].join("\n")}
       />
       <Form.Description
-        title={isDE ? "Beispiel" : "Example"}
-        text={isDE ? EXAMPLE_DE : EXAMPLE_EN}
+        title={t(language, "example")}
+        text={[
+          t(language, "syntax.standard.example.title"),
+          "==",
+          t(language, "syntax.standard.example.back"),
+          "#biology #school",
+        ].join("\n")}
       />
 
       <Form.Separator />
@@ -191,19 +101,36 @@ export default function CreateCard() {
       {/* ── Multiple-Choice: Schritte ── */}
       <Form.Description
         title=""
-        text={isDE ? MC_STEPS_DE : MC_STEPS_EN}
+        text={[
+          t(language, "syntax.mc.title"),
+          t(language, "syntax.mc.1"),
+          t(language, "syntax.mc.2"),
+          t(language, "syntax.mc.3"),
+          t(language, "syntax.mc.4"),
+          t(language, "syntax.mc.5"),
+          t(language, "syntax.mc.6"),
+        ].join("\n")}
       />
       <Form.Description
-        title={isDE ? "Beispiel" : "Example"}
-        text={isDE ? MC_EXAMPLE_DE : MC_EXAMPLE_EN}
+        title={t(language, "example")}
+        text={[
+          t(language, "syntax.mc.example.title"),
+          "==<",
+          "1: 1945",
+          "2: 1957",
+          "3: 1993",
+          "--",
+          `${t(language, "syntax.mc.5").split(":")[0]}: 2`,
+          "#history #politics",
+        ].join("\n")}
       />
 
       <Form.Separator />
 
       {/* ── Tag-Kategorien ── */}
       <Form.Description
-        title={isDE ? "Tag-Kategorien" : "Tag Categories"}
-        text={isDE ? TAGS_DE : TAGS_EN}
+        title={t(language, "tag.categories")}
+        text={t(language, "syntax.tags.info")}
       />
     </Form>
   );

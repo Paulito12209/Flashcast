@@ -15,10 +15,11 @@ import { useEffect, useState, useCallback } from "react";
 import { Flashcard, Preferences } from "./types";
 import { getAllCards, deleteCard, deleteAllCards } from "./utils/storage";
 import EditTags from "./edit-tags";
+import { t } from "./utils/i18n";
 
-function cardDetailMarkdown(card: Flashcard, isDE: boolean): string {
+function cardDetailMarkdown(card: Flashcard, language: string): string {
   if (card.type === "standard") {
-    return `## ${isDE ? "Antwort" : "Answer"}\n\n${card.back || "—"}`;
+    return `## ${t(language, "answer")}\n\n${card.back || "—"}`;
   }
 
   const optionLines = (card.options ?? [])
@@ -28,24 +29,23 @@ function cardDetailMarkdown(card: Flashcard, isDE: boolean): string {
     })
     .join("\n\n");
 
-  return `## ${isDE ? "Optionen" : "Options"}\n\n${optionLines}`;
+  return `## ${t(language, "options")}\n\n${optionLines}`;
 }
 
-function progressAccessory(card: Flashcard, isDE: boolean) {
+function progressAccessory(card: Flashcard, language: string) {
   if (card.progress === "correct") {
-    return { tag: { value: "✓", color: Color.Green }, tooltip: isDE ? "Richtig beantwortet" : "Answered correctly" };
+    return { tag: { value: "✓", color: Color.Green }, tooltip: t(language, "answered.correct") };
   }
   if (card.progress === "wrong") {
-    return { tag: { value: "✗", color: Color.Red }, tooltip: isDE ? "Falsch beantwortet" : "Answered wrong" };
+    return { tag: { value: "✗", color: Color.Red }, tooltip: t(language, "answered.wrong") };
   }
-  return { tag: { value: "·", color: Color.SecondaryText }, tooltip: isDE ? "Noch nicht abgefragt" : "Not yet quizzed" };
+  return { tag: { value: "·", color: Color.SecondaryText }, tooltip: t(language, "not.quizzed") };
 }
 
 export default function ListCards() {
   const [cards, setCards] = useState<Flashcard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { language } = getPreferenceValues<Preferences>();
-  const isDE = language === "de";
   const { push } = useNavigation();
 
   const loadCards = useCallback(async () => {
@@ -60,28 +60,26 @@ export default function ListCards() {
 
   async function handleDelete(card: Flashcard) {
     const confirmed = await confirmAlert({
-      title: isDE ? "Karteikarte löschen?" : "Delete flashcard?",
+      title: t(language, "delete.title"),
       message: `"${card.front}"`,
       primaryAction: {
-        title: isDE ? "Löschen" : "Delete",
+        title: t(language, "delete.btn"),
         style: Alert.ActionStyle.Destructive,
       },
     });
     if (confirmed) {
       await deleteCard(card.id);
-      await showToast({ style: Toast.Style.Success, title: isDE ? "Gelöscht" : "Deleted" });
+      await showToast({ style: Toast.Style.Success, title: t(language, "deleted") });
       loadCards();
     }
   }
 
   async function handleDeleteAll() {
     const confirmed = await confirmAlert({
-      title: isDE ? "Alle Karteikarten löschen?" : "Delete all flashcards?",
-      message: isDE
-        ? "Diese Aktion kann nicht rückgängig gemacht werden."
-        : "This action cannot be undone.",
+      title: t(language, "delete.all.title"),
+      message: t(language, "delete.all.msg"),
       primaryAction: {
-        title: isDE ? "Alle löschen" : "Delete all",
+        title: t(language, "delete.all.btn"),
         style: Alert.ActionStyle.Destructive,
       },
     });
@@ -89,7 +87,7 @@ export default function ListCards() {
       await deleteAllCards();
       await showToast({
         style: Toast.Style.Success,
-        title: isDE ? "Alle Karten gelöscht" : "All cards deleted",
+        title: t(language, "all.deleted"),
       });
       loadCards();
     }
@@ -102,13 +100,13 @@ export default function ListCards() {
     <List
       isLoading={isLoading}
       isShowingDetail
-      searchBarPlaceholder={isDE ? "Karteikarten durchsuchen…" : "Search flashcards…"}
+      searchBarPlaceholder={t(language, "search.cards")}
     >
       {cards.length === 0 && !isLoading ? (
         <List.EmptyView
           icon={Icon.Book}
-          title={isDE ? "Noch keine Karteikarten" : "No flashcards yet"}
-          description={isDE ? 'Erstelle deine erste Karte mit dem Command "Erstellen".' : 'Create your first card with the "Erstellen" command.'}
+          title={t(language, "no.cards")}
+          description={t(language, "no.cards.desc")}
         />
       ) : (
         cards.map((card) => (
@@ -117,39 +115,39 @@ export default function ListCards() {
             icon={typeIcon(card)}
             title={card.front}
             accessories={[
-              progressAccessory(card, isDE),
-              ...card.tags.map((t) => ({ tag: `#${t}` })),
+              progressAccessory(card, language),
+              ...card.tags.map((tg) => ({ tag: `#${tg}` })),
             ]}
             detail={
               <List.Item.Detail
-                markdown={cardDetailMarkdown(card, isDE)}
+                markdown={cardDetailMarkdown(card, language)}
                 metadata={
                   <List.Item.Detail.Metadata>
                     <List.Item.Detail.Metadata.Label
-                      title={isDE ? "Typ" : "Type"}
-                      text={card.type === "standard" ? (isDE ? "Standard" : "Standard") : "Multiple Choice"}
+                      title={t(language, "type")}
+                      text={card.type === "standard" ? t(language, "standard") : t(language, "mc")}
                     />
                     <List.Item.Detail.Metadata.Label
-                      title={isDE ? "Status" : "Status"}
+                      title={t(language, "status")}
                       text={
                         card.progress === "correct"
-                          ? isDE ? "✓ Richtig" : "✓ Correct"
+                          ? t(language, "status.correct")
                           : card.progress === "wrong"
-                          ? isDE ? "✗ Falsch" : "✗ Wrong"
-                          : isDE ? "· Neu" : "· New"
+                          ? t(language, "status.wrong")
+                          : t(language, "status.new")
                       }
                     />
                     {card.tags.length > 0 && (
                       <List.Item.Detail.Metadata.TagList title="Tags">
-                        {card.tags.map((t) => (
-                          <List.Item.Detail.Metadata.TagList.Item key={t} text={`#${t}`} />
+                        {card.tags.map((tg) => (
+                          <List.Item.Detail.Metadata.TagList.Item key={tg} text={`#${tg}`} />
                         ))}
                       </List.Item.Detail.Metadata.TagList>
                     )}
                     <List.Item.Detail.Metadata.Separator />
                     <List.Item.Detail.Metadata.Label
-                      title={isDE ? "Erstellt" : "Created"}
-                      text={new Date(card.createdAt).toLocaleDateString(isDE ? "de-DE" : "en-US")}
+                      title={t(language, "created")}
+                      text={new Date(card.createdAt).toLocaleDateString(language === "en" ? "en-US" : language + "-" + language.toUpperCase())}
                     />
                   </List.Item.Detail.Metadata>
                 }
@@ -159,7 +157,7 @@ export default function ListCards() {
               <ActionPanel>
                 {/* Tags bearbeiten – öffnet dediziertes Formular */}
                 <Action
-                  title={isDE ? "Tags bearbeiten" : "Edit Tags"}
+                  title={t(language, "edit.tags")}
                   icon={Icon.Tag}
                   shortcut={{ modifiers: ["cmd"], key: "t" }}
                   onAction={() =>
@@ -167,21 +165,21 @@ export default function ListCards() {
                   }
                 />
                 <Action
-                  title={isDE ? "Löschen" : "Delete"}
+                  title={t(language, "delete.btn")}
                   icon={Icon.Trash}
                   style={Action.Style.Destructive}
                   shortcut={{ modifiers: ["ctrl"], key: "x" }}
                   onAction={() => handleDelete(card)}
                 />
                 <Action
-                  title={isDE ? "Alle löschen" : "Delete All"}
+                  title={t(language, "delete.all.btn")}
                   icon={Icon.XMarkCircle}
                   style={Action.Style.Destructive}
                   shortcut={{ modifiers: ["ctrl", "shift"], key: "x" }}
                   onAction={handleDeleteAll}
                 />
                 <Action
-                  title={isDE ? "Aktualisieren" : "Refresh"}
+                  title={t(language, "refresh")}
                   icon={Icon.RotateClockwise}
                   shortcut={{ modifiers: ["cmd"], key: "r" }}
                   onAction={loadCards}

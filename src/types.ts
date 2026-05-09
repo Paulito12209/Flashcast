@@ -19,5 +19,5 @@ export interface Flashcard {
 }
 
 export interface Preferences {
-  language: "de" | "en";
+  language: "de" | "en" | "es" | "zh" | "hi" | "ru" | "ar" | "pt" | "it" | "tr";
 }

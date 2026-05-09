@@ -25,7 +25,11 @@ import { CardType, Flashcard, Option, Preferences } from "../types";
  */
 export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" | "createdAt"> {
   const { language } = getPreferenceValues<Preferences>();
-  const correctKeyword = language === "de" ? "richtig" : "true";
+  const keywords: Record<string, string> = {
+    de: "richtig", en: "true", es: "correcto", zh: "正确", hi: "सही",
+    ru: "правильно", ar: "صحيح", pt: "correto", it: "corretto", tr: "doğru"
+  };
+  const correctKeyword = keywords[language] || "true";
 
   const lines = input.trim().split("\n");
 

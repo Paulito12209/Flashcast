@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { Flashcard, Preferences } from "./types";
 import { saveCard, getAllTags } from "./utils/storage";
+import { t } from "./utils/i18n";
 
 interface Props {
   card: Flashcard;
@@ -20,11 +21,10 @@ interface Props {
 
 export default function EditTags({ card, onSaved }: Props) {
   const { language } = getPreferenceValues<Preferences>();
-  const isDE = language === "de";
   const { pop } = useNavigation();
 
   // Tags mit # vorformatiert als Standardwert anzeigen
-  const [tagInput, setTagInput] = useState(card.tags.map((t) => `#${t}`).join(" "));
+  const [tagInput, setTagInput] = useState(card.tags.map((tg) => `#${tg}`).join(" "));
   const [existingTags, setExistingTags] = useState<string[]>([]);
 
   // Bereits verwendete Tags aus dem Storage laden (als Vorschläge)
@@ -35,11 +35,9 @@ export default function EditTags({ card, onSaved }: Props) {
   // Hilfetext: bereits verwendete Tags anzeigen
   const suggestionsText =
     existingTags.length > 0
-      ? (isDE ? "Bereits verwendet: " : "Already used: ") +
-        existingTags.map((t) => `#${t}`).join("  ")
-      : isDE
-        ? "Noch keine Tags vorhanden."
-        : "No tags created yet.";
+      ? t(language, "already.used") +
+        existingTags.map((tg) => `#${tg}`).join("  ")
+      : t(language, "no.tags.created");
 
   async function handleSubmit(values: { tags: string }) {
     // Tags aus der Eingabe parsen – Leerzeichen- oder Komma-getrennt, mit oder ohne #
@@ -50,7 +48,7 @@ export default function EditTags({ card, onSaved }: Props) {
       : [...new Set(
           raw
             .split(/[\s,]+/)
-            .map((t) => t.replace(/^#/, "").trim().toLowerCase())
+            .map((tg) => tg.replace(/^#/, "").trim().toLowerCase())
             .filter(Boolean)
         )];
 
@@ -60,18 +58,18 @@ export default function EditTags({ card, onSaved }: Props) {
       await saveCard(updated);
       await showToast({
         style: Toast.Style.Success,
-        title: isDE ? "Tags gespeichert!" : "Tags saved!",
+        title: t(language, "tags.saved"),
         message:
           parsed.length === 0
-            ? isDE ? "Alle Tags entfernt." : "All tags removed."
-            : parsed.map((t) => `#${t}`).join(" "),
+            ? t(language, "all.tags.removed")
+            : parsed.map((tg) => `#${tg}`).join(" "),
       });
       onSaved?.();
       pop();
     } catch (e) {
       await showToast({
         style: Toast.Style.Failure,
-        title: isDE ? "Fehler beim Speichern" : "Error saving",
+        title: t(language, "error.saving"),
         message: String(e),
       });
     }
@@ -79,16 +77,16 @@ export default function EditTags({ card, onSaved }: Props) {
 
   return (
     <Form
-      navigationTitle={isDE ? `Tags bearbeiten – ${card.front}` : `Edit Tags – ${card.front}`}
+      navigationTitle={t(language, "edit.tags") + ` – ${card.front}`}
       actions={
         <ActionPanel>
           <Action.SubmitForm
-            title={isDE ? "Tags speichern" : "Save Tags"}
+            title={t(language, "tags.saved").replace("!", "")}
             icon={Icon.CheckCircle}
             onSubmit={handleSubmit}
           />
           <Action
-            title={isDE ? "Abbrechen" : "Cancel"}
+            title={t(language, "cancel")}
             icon={Icon.XMarkCircle}
             shortcut={{ modifiers: ["cmd"], key: "." }}
             onAction={pop}
@@ -98,7 +96,7 @@ export default function EditTags({ card, onSaved }: Props) {
     >
       {/* Karten-Vorschau */}
       <Form.Description
-        title={isDE ? "Karteikarte" : "Flashcard"}
+        title={t(language, "card.title")}
         text={card.front}
       />
       <Form.Separator />
@@ -106,20 +104,16 @@ export default function EditTags({ card, onSaved }: Props) {
       {/* Tag-Eingabe */}
       <Form.TextField
         id="tags"
-        title="Tags"
-        placeholder={isDE ? "#vokabular #grammatik #unternehmen" : "#vocabulary #grammar #companies"}
+        title={t(language, "tags")}
+        placeholder="#vokabel #grammatik #unternehmen"
         value={tagInput}
         onChange={setTagInput}
-        info={
-          isDE
-            ? "Tags mit # eingeben, durch Leerzeichen oder Komma trennen.\nBeispiele: #vokabular  #personen  #tools  #unternehmen"
-            : "Enter tags with #, separated by spaces or commas.\nExamples: #vocabulary  #persons  #tools  #companies"
-        }
+        info={t(language, "tags.input.info")}
       />
 
       {/* Vorhandene Tags als Hilfe anzeigen */}
       <Form.Description
-        title={isDE ? "Vorhandene Tags" : "Existing Tags"}
+        title={t(language, "existing.tags")}
         text={suggestionsText}
       />
 
@@ -127,36 +121,8 @@ export default function EditTags({ card, onSaved }: Props) {
 
       {/* Hinweise zur Syntax */}
       <Form.Description
-        title={isDE ? "Hinweise" : "Tips"}
-        text={
-          isDE
-            ? [
-                "• Tags beginnen mit # (das # kann auch weggelassen werden)",
-                "• Mehrere Tags durch Leerzeichen oder Komma trennen",
-                "• Groß-/Kleinschreibung wird ignoriert",
-                "• Feld leer lassen, um alle Tags zu entfernen",
-                "",
-                "Beispiel-Kategorien:",
-                "  #vokabular   – Fremdwörter & Begriffe",
-                "  #unternehmen – Firmen & Marken",
-                "  #personen    – Wichtige Persönlichkeiten",
-                "  #tools       – Software & Werkzeuge",
-                "  #grammatik   – Sprachregeln",
-              ].join("\n")
-            : [
-                "• Tags start with # (the # can be omitted)",
-                "• Separate multiple tags with spaces or commas",
-                "• Case is ignored",
-                "• Leave the field empty to remove all tags",
-                "",
-                "Example categories:",
-                "  #vocabulary  – Words & Terms",
-                "  #companies   – Brands & Organizations",
-                "  #persons     – Notable People",
-                "  #tools       – Software & Utilities",
-                "  #grammar     – Language Rules",
-              ].join("\n")
-        }
+        title={t(language, "tips")}
+        text={t(language, "tips.text")}
       />
     </Form>
   );

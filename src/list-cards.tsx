@@ -14,6 +14,7 @@ import {
 import { useEffect, useState, useCallback } from "react";
 import { Flashcard, Preferences } from "./types";
 import { getAllCards, deleteCard } from "./utils/storage";
+import EditTags from "./edit-tags";
 
 function cardDetailMarkdown(card: Flashcard, isDE: boolean): string {
   if (card.type === "standard") {
@@ -45,6 +46,7 @@ export default function ListCards() {
   const [isLoading, setIsLoading] = useState(true);
   const { language } = getPreferenceValues<Preferences>();
   const isDE = language === "de";
+  const { push } = useNavigation();
 
   const loadCards = useCallback(async () => {
     setIsLoading(true);
@@ -134,6 +136,15 @@ export default function ListCards() {
             }
             actions={
               <ActionPanel>
+                {/* Tags bearbeiten – öffnet dediziertes Formular */}
+                <Action
+                  title={isDE ? "Tags bearbeiten" : "Edit Tags"}
+                  icon={Icon.Tag}
+                  shortcut={{ modifiers: ["cmd"], key: "t" }}
+                  onAction={() =>
+                    push(<EditTags card={card} onSaved={loadCards} />)
+                  }
+                />
                 <Action
                   title={isDE ? "Löschen" : "Delete"}
                   icon={Icon.Trash}

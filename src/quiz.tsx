@@ -10,7 +10,7 @@ import {
   Toast,
   useNavigation,
 } from "@raycast/api";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Flashcard, Preferences } from "./types";
 import { getAllCards, getAllTags, updateProgress } from "./utils/storage";
 import { t } from "./utils/i18n";
@@ -43,9 +43,18 @@ function StandardCardQuiz({
 }) {
   const [revealed, setRevealed] = useState(false);
 
+  // Antwort zurücksetzen, wenn sich die Karte ändert
+  const prevCardId = useRef(card.id);
+  useEffect(() => {
+    if (prevCardId.current !== card.id) {
+      setRevealed(false);
+      prevCardId.current = card.id;
+    }
+  }, [card.id]);
+
   const frontMd = `# ${card.front}\n\n---\n\n*${t(language, "reveal.hint")}*`;
 
-  const backMd = `# ${card.front}\n\n---\n\n## ${t(language, "answer")}\n\n**${card.back}**`;
+  const backMd = `# ${card.front}\n\n---\n\n## ${t(language, "answer")}\n\n**${card.back}**\n\n---\n\n*${t(language, "quiz.rate.hint")}*\n\n➡️ *${t(language, "quiz.correct.hint")}*  \n⬅️ *${t(language, "quiz.wrong.hint")}*`;
 
   return (
     <Detail
@@ -227,10 +236,11 @@ function QuizSession({ cards, language }: { cards: Flashcard[]; language: string
 
   if (!card) return null;
 
+  // key={card.id} erzwingt ein Neu-Mounten bei Kartenwechsel → alle States werden zurückgesetzt
   return card.type === "standard" ? (
-    <StandardCardQuiz card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
+    <StandardCardQuiz key={card.id} card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
   ) : (
-    <MCCardQuiz card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
+    <MCCardQuiz key={card.id} card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
   );
 }
 

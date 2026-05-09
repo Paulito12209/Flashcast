@@ -13,7 +13,7 @@ import {
 } from "@raycast/api";
 import { useEffect, useState, useCallback } from "react";
 import { Flashcard, Preferences } from "./types";
-import { getAllCards, deleteCard } from "./utils/storage";
+import { getAllCards, deleteCard, deleteAllCards } from "./utils/storage";
 import EditTags from "./edit-tags";
 
 function cardDetailMarkdown(card: Flashcard, isDE: boolean): string {
@@ -31,14 +31,14 @@ function cardDetailMarkdown(card: Flashcard, isDE: boolean): string {
   return `## ${isDE ? "Optionen" : "Options"}\n\n${optionLines}`;
 }
 
-function progressAccessory(card: Flashcard) {
+function progressAccessory(card: Flashcard, isDE: boolean) {
   if (card.progress === "correct") {
-    return { tag: { value: "✓", color: Color.Green }, tooltip: "Richtig beantwortet" };
+    return { tag: { value: "✓", color: Color.Green }, tooltip: isDE ? "Richtig beantwortet" : "Answered correctly" };
   }
   if (card.progress === "wrong") {
-    return { tag: { value: "✗", color: Color.Red }, tooltip: "Falsch beantwortet" };
+    return { tag: { value: "✗", color: Color.Red }, tooltip: isDE ? "Falsch beantwortet" : "Answered wrong" };
   }
-  return { tag: { value: "·", color: Color.SecondaryText }, tooltip: "Noch nicht abgefragt" };
+  return { tag: { value: "·", color: Color.SecondaryText }, tooltip: isDE ? "Noch nicht abgefragt" : "Not yet quizzed" };
 }
 
 export default function ListCards() {
@@ -74,6 +74,27 @@ export default function ListCards() {
     }
   }
 
+  async function handleDeleteAll() {
+    const confirmed = await confirmAlert({
+      title: isDE ? "Alle Karteikarten löschen?" : "Delete all flashcards?",
+      message: isDE
+        ? "Diese Aktion kann nicht rückgängig gemacht werden."
+        : "This action cannot be undone.",
+      primaryAction: {
+        title: isDE ? "Alle löschen" : "Delete all",
+        style: Alert.ActionStyle.Destructive,
+      },
+    });
+    if (confirmed) {
+      await deleteAllCards();
+      await showToast({
+        style: Toast.Style.Success,
+        title: isDE ? "Alle Karten gelöscht" : "All cards deleted",
+      });
+      loadCards();
+    }
+  }
+
   const typeIcon = (card: Flashcard) =>
     card.type === "multiple-choice" ? Icon.List : Icon.TextCursor;
 
@@ -96,7 +117,7 @@ export default function ListCards() {
             icon={typeIcon(card)}
             title={card.front}
             accessories={[
-              progressAccessory(card),
+              progressAccessory(card, isDE),
               ...card.tags.map((t) => ({ tag: `#${t}` })),
             ]}
             detail={
@@ -151,6 +172,13 @@ export default function ListCards() {
                   style={Action.Style.Destructive}
                   shortcut={{ modifiers: ["ctrl"], key: "x" }}
                   onAction={() => handleDelete(card)}
+                />
+                <Action
+                  title={isDE ? "Alle löschen" : "Delete All"}
+                  icon={Icon.XMarkCircle}
+                  style={Action.Style.Destructive}
+                  shortcut={{ modifiers: ["ctrl", "shift"], key: "x" }}
+                  onAction={handleDeleteAll}
                 />
                 <Action
                   title={isDE ? "Aktualisieren" : "Refresh"}

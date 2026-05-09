@@ -6,27 +6,22 @@ import { CardType, Flashcard, Option, Preferences } from "../types";
  *
  * Standard-Karte:
  *   Frage
- *
  *   ==
- *
  *   Antwort
- *
  *   #tag1 #tag2
  *
  * Multiple-Choice-Karte:
  *   Frage
- *
  *   ==<
- *
  *   1: Option A
  *   2: Option B
  *   3: Option C
- *
  *   --
- *
  *   richtig: 2   (DE) / true: 2  (EN)
- *
  *   #tag1 #tag2
+ *
+ * Leerzeilen zwischen den Abschnitten sind optional.
+ * Tags werden automatisch auf Kleinschreibung normalisiert.
  */
 export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" | "createdAt"> {
   const { language } = getPreferenceValues<Preferences>();
@@ -40,14 +35,14 @@ export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" 
 
   const lastLine = lines[lines.length - 1]?.trim() ?? "";
   if (/^(#\w+\s*)+$/.test(lastLine)) {
-    tags = (lastLine.match(/#(\w+)/g) ?? []).map((t) => t.slice(1));
+    tags = (lastLine.match(/#(\w+)/g) ?? []).map((t) => t.slice(1).toLowerCase());
     contentLines = lines.slice(0, -1);
   }
 
   const content = contentLines.join("\n").trim();
 
   // Typ erkennen anhand des Trennzeichens
-  if (/\n\s*==</.test(content)) {
+  if (/\n[\t ]*==</.test(content)) {
     return parseMC(content, tags, correctKeyword);
   } else {
     return parseStandard(content, tags);
@@ -55,8 +50,8 @@ export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" 
 }
 
 function parseStandard(content: string, tags: string[]): Omit<Flashcard, "id" | "progress" | "createdAt"> {
-  // Teilen an ==
-  const parts = content.split(/\n\s*==\s*\n/);
+  // Teilen an == – mit oder ohne Leerzeilen darum
+  const parts = content.split(/\n[\t ]*==[\t ]*\n/);
   const front = parts[0]?.trim() ?? "";
   const back = parts[1]?.trim() ?? "";
 
@@ -73,12 +68,12 @@ function parseMC(
   tags: string[],
   correctKeyword: string
 ): Omit<Flashcard, "id" | "progress" | "createdAt"> {
-  // Teilen an ==<
-  const [frontPart, rest] = content.split(/\n\s*==<\s*\n/);
+  // Teilen an ==< – mit oder ohne Leerzeilen darum
+  const [frontPart, rest] = content.split(/\n[\t ]*==<[\t ]*\n/);
   const front = frontPart?.trim() ?? "";
 
-  // Rest teilen an --
-  const [optionsPart, correctPart] = (rest ?? "").split(/\n\s*--\s*\n/);
+  // Rest teilen an -- – mit oder ohne Leerzeilen darum
+  const [optionsPart, correctPart] = (rest ?? "").split(/\n[\t ]*--[\t ]*\n/);
 
   // Optionen parsen: "1: Text", "2: Text", "3: Text"
   const options: Option[] = (optionsPart ?? "")

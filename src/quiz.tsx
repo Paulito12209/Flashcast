@@ -297,7 +297,11 @@ function TagSelector({
                     onAction={() => toggleTag(tag)}
                   />
                   <Action
-                    title={isDE ? `Quiz starten (${selected.size === 0 ? isDE ? "alle" : "all" : selected.size + " Tags"})` : `Start quiz`}
+                    title={
+                      isDE
+                        ? `Quiz starten (${selected.size === 0 ? "alle" : selected.size + " Tags"})`
+                        : `Start quiz (${selected.size === 0 ? "all" : selected.size + " tags"})`
+                    }
                     icon={Icon.Play}
                     onAction={startQuiz}
                   />

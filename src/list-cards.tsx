@@ -115,8 +115,8 @@ export default function ListCards() {
             icon={typeIcon(card)}
             title={card.front}
             accessories={[
-              progressAccessory(card, language),
-              ...card.tags.map((tg) => ({ tag: `#${tg}` })),
+              ...(card.tags.length > 0 ? [{ tag: `#${card.tags[0]}` }] : []),
+              ...(card.tags.length > 1 ? [{ text: `+${card.tags.length - 1}` }] : []),
             ]}
             detail={
               <List.Item.Detail

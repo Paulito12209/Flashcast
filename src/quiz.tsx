@@ -375,49 +375,76 @@ function ModeSelector({
     push(<QuizSession cards={allCards} language={language} />);
   }
 
+  // Modus-Definitionen mit Shortcuts für schnellen Zugriff
+  const modes = [
+    {
+      icon: { source: Icon.XMarkCircle, tintColor: Color.Red },
+      title: t(language, "wrong.cards"),
+      subtitle: `${wrongCards.length} ${t(language, "cards")}`,
+      onAction: startWrongCards,
+      actionTitle: t(language, "start.quiz"),
+      actionIcon: Icon.Play,
+      shortcut: { modifiers: ["cmd" as const], key: "1" as const },
+    },
+    {
+      icon: { source: Icon.Circle, tintColor: Color.SecondaryText },
+      title: t(language, "new.cards"),
+      subtitle: `${newCards.length} ${t(language, "cards")}`,
+      onAction: startNewCards,
+      actionTitle: t(language, "start.quiz"),
+      actionIcon: Icon.Play,
+      shortcut: { modifiers: ["cmd" as const], key: "2" as const },
+    },
+    {
+      icon: Icon.Tag,
+      title: t(language, "by.tags"),
+      subtitle: t(language, "select.tags"),
+      onAction: startByTag,
+      actionTitle: t(language, "select.tags"),
+      actionIcon: Icon.ArrowRight,
+      shortcut: { modifiers: ["cmd" as const], key: "3" as const },
+    },
+    {
+      icon: Icon.Book,
+      title: t(language, "all.cards"),
+      subtitle: `${allCards.length} ${t(language, "cards")}`,
+      onAction: startAll,
+      actionTitle: t(language, "start.quiz"),
+      actionIcon: Icon.Play,
+      shortcut: { modifiers: ["cmd" as const], key: "4" as const },
+    },
+  ];
+
   return (
     <List navigationTitle={t(language, "choose.mode")}>
       <List.Section title={t(language, "select.mode")}>
-        <List.Item
-          icon={{ source: Icon.XMarkCircle, tintColor: Color.Red }}
-          title={t(language, "wrong.cards")}
-          subtitle={`${wrongCards.length} ${t(language, "cards")}`}
-          actions={
-            <ActionPanel>
-              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startWrongCards} />
-            </ActionPanel>
-          }
-        />
-        <List.Item
-          icon={{ source: Icon.Circle, tintColor: Color.SecondaryText }}
-          title={t(language, "new.cards")}
-          subtitle={`${newCards.length} ${t(language, "cards")}`}
-          actions={
-            <ActionPanel>
-              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startNewCards} />
-            </ActionPanel>
-          }
-        />
-        <List.Item
-          icon={Icon.Tag}
-          title={t(language, "by.tags")}
-          subtitle={t(language, "select.tags")}
-          actions={
-            <ActionPanel>
-              <Action title={t(language, "select.tags")} icon={Icon.ArrowRight} onAction={startByTag} />
-            </ActionPanel>
-          }
-        />
-        <List.Item
-          icon={Icon.Book}
-          title={t(language, "all.cards")}
-          subtitle={`${allCards.length} ${t(language, "cards")}`}
-          actions={
-            <ActionPanel>
-              <Action title={t(language, "start.quiz")} icon={Icon.Play} onAction={startAll} />
-            </ActionPanel>
-          }
-        />
+        {modes.map((mode, i) => (
+          <List.Item
+            key={i}
+            icon={mode.icon}
+            title={mode.title}
+            subtitle={mode.subtitle}
+            accessories={[{ text: `⌘${i + 1}` }]}
+            actions={
+              <ActionPanel>
+                {/* Primäre Aktion (Enter) für den fokussierten Eintrag */}
+                <Action title={mode.actionTitle} icon={mode.actionIcon} onAction={mode.onAction} />
+                {/* Alle anderen Shortcuts, damit ⌘1-⌘4 von jedem Eintrag aus funktionieren */}
+                {modes
+                  .filter((_, j) => j !== i)
+                  .map((m) => (
+                    <Action
+                      key={m.title}
+                      title={m.actionTitle + ` – ${m.title}`}
+                      icon={m.actionIcon}
+                      shortcut={m.shortcut}
+                      onAction={m.onAction}
+                    />
+                  ))}
+              </ActionPanel>
+            }
+          />
+        ))}
       </List.Section>
     </List>
   );

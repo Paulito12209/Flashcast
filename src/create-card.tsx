@@ -3,21 +3,21 @@ import { parseMarkdown } from "./utils/parser";
 import { saveCard } from "./utils/storage";
 import { Flashcard, Preferences } from "./types";
 
-// ── Standard-Karte: Schritte (Beschreibungstext) ──────────────────────────────
+// ── Standard-Karte: Schritte ──────────────────────────────────────────────────
 const STEPS_DE = [
-  "── Standard-Karte ─────────────────────────────────────",
+  "— Standard-Karte —",
   "1. Titel eingeben",
-  "2. Enter drücken · == eingeben · Enter drücken  →  Trenner",
-  "3. Antwort eingeben",
-  "4. Tags anhängen  (optional, alles kleinschreiben)",
+  "2. Enter + == + Enter  (= Trenner Vorder-/Rückseite)",
+  "3. Antwort eingeben + Enter",
+  "4. Tags anhängen  (optional, Leerzeichen zwischen Tags, alles klein)",
 ].join("\n");
 
 const STEPS_EN = [
-  "── Standard card ──────────────────────────────────────────",
+  "— Standard card —",
   "1. Enter the title",
-  "2. Press Enter · type == · press Enter  →  separator",
-  "3. Enter the answer",
-  "4. Add tags  (optional, always lowercase)",
+  "2. Enter + == + Enter  (= separator front/back)",
+  "3. Enter the answer + Enter",
+  "4. Add tags  (optional, space between tags, always lowercase)",
 ].join("\n");
 
 // ── Standard-Karte: Beispiel (einzutippender Text) ────────────────────────────
@@ -37,23 +37,23 @@ const EXAMPLE_EN = [
 
 // ── Multiple-Choice: Schritte ──────────────────────────────────────────────────
 const MC_STEPS_DE = [
-  "── Multiple-Choice-Karte ───────────────────────────────",
-  "1. Frage eingeben",
-  "2. Enter drücken · ==< eingeben · Enter drücken  →  Trenner",
-  "3. Optionen eingeben  (z.B.  1: Text  2: Text  3: Text)",
-  "4. Enter drücken · -- eingeben · Enter drücken  →  Trenner",
-  "5. Richtige Antwort  (z.B.  richtig: 2)",
-  "6. Tags anhängen  (optional, alles kleinschreiben)",
+  "— Multiple-Choice-Karte —",
+  "1. Frage eingeben + Enter",
+  "2. ==< + Enter  (= Trenner zur Frage)",
+  "3. Optionen + Enter:  1: Text   2: Text   3: Text",
+  "4. -- + Enter  (= Trenner zur Antwort)",
+  "5. richtig: 2 + Enter",
+  "6. Tags anhängen  (optional, Leerzeichen zwischen Tags, alles klein)",
 ].join("\n");
 
 const MC_STEPS_EN = [
-  "── Multiple-choice card ────────────────────────────────",
-  "1. Enter the question",
-  "2. Press Enter · type ==< · press Enter  →  separator",
-  "3. Enter options  (e.g.  1: Text  2: Text  3: Text)",
-  "4. Press Enter · type -- · press Enter  →  separator",
-  "5. Correct answer  (e.g.  true: 2)",
-  "6. Add tags  (optional, always lowercase)",
+  "— Multiple-choice card —",
+  "1. Enter the question + Enter",
+  "2. ==< + Enter  (= separator)",
+  "3. Options + Enter:  1: Text   2: Text   3: Text",
+  "4. -- + Enter  (= separator to answer)",
+  "5. true: 2 + Enter",
+  "6. Add tags  (optional, space between tags, always lowercase)",
 ].join("\n");
 
 // ── Multiple-Choice: Beispiel ─────────────────────────────────────────────────

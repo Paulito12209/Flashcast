@@ -283,6 +283,9 @@ function TagSelector({
     push(<QuizSession cards={filtered} language={language} />);
   }
 
+  // Shortcut-Keys für die ersten 9 Tags (⌘1 bis ⌘9)
+  const shortcutKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
+
   return (
     <List
       navigationTitle={t(language, "select.tags")}
@@ -292,21 +295,23 @@ function TagSelector({
         title={t(language, "select.multiple")}
         subtitle={selected.size === 0 ? t(language, "all") : `${selected.size} ${t(language, "selected")}`}
       >
-        {tags.map((tag) => {
+        {tags.map((tag, i) => {
           const isSelected = selected.has(tag);
           const count = allCards.filter((c) => c.tags.includes(tag)).length;
+          const hasShortcut = i < shortcutKeys.length;
+
           return (
             <List.Item
               key={tag}
               icon={isSelected ? { source: Icon.CheckCircle, tintColor: Color.Blue } : Icon.Circle}
               title={`#${tag}`}
-              accessories={[{ text: `${count}` }]}
+              accessories={[
+                { text: `${count}` },
+                ...(hasShortcut ? [{ tag: `⌘${shortcutKeys[i]}` }] : []),
+              ]}
               actions={
                 <ActionPanel>
-                  <Action
-                    title={isSelected ? t(language, "deselect") : t(language, "select")}
-                    onAction={() => toggleTag(tag)}
-                  />
+                  {/* Primäre Aktion: Quiz starten (Enter) */}
                   <Action
                     title={
                       `${t(language, "start.quiz")} (${selected.size === 0 ? t(language, "all").toLowerCase() : selected.size + " " + t(language, "tags")})`
@@ -314,6 +319,22 @@ function TagSelector({
                     icon={Icon.Play}
                     onAction={startQuiz}
                   />
+                  {/* Tag an-/abwählen (für fokussiertes Item ohne Shortcut) */}
+                  <Action
+                    title={isSelected ? t(language, "deselect") : t(language, "select")}
+                    icon={isSelected ? Icon.CheckCircle : Icon.Circle}
+                    onAction={() => toggleTag(tag)}
+                  />
+                  {/* Alle Tag-Shortcuts (⌘1-⌘9), damit sie von jedem Item aus funktionieren */}
+                  {tags.slice(0, shortcutKeys.length).map((tg, j) => (
+                    <Action
+                      key={tg}
+                      title={`${selected.has(tg) ? "✓ " : ""}#${tg}`}
+                      icon={selected.has(tg) ? { source: Icon.CheckCircle, tintColor: Color.Blue } : Icon.Circle}
+                      shortcut={{ modifiers: ["cmd"], key: shortcutKeys[j] }}
+                      onAction={() => toggleTag(tg)}
+                    />
+                  ))}
                 </ActionPanel>
               }
             />

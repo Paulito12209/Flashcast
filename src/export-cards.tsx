@@ -33,9 +33,10 @@ export default function ExportCards() {
   const markdown = cards.length > 0 ? cardsToMarkdown(cards, language) : "";
 
   // Vorschau-Text für die Detail-Ansicht
-  const previewMarkdown = cards.length > 0
-    ? `## ${t(language, "export.title")}\n\n**${t(language, "export.count").replace("{n}", String(cards.length))}**\n\n---\n\n\`\`\`markdown\n${markdown}\n\`\`\``
-    : `## ${t(language, "export.title")}\n\n${t(language, "export.empty")}`;
+  const previewMarkdown =
+    cards.length > 0
+      ? `## ${t(language, "export.title")}\n\n**${t(language, "export.count").replace("{n}", String(cards.length))}**\n\n---\n\n\`\`\`markdown\n${markdown}\n\`\`\``
+      : `## ${t(language, "export.title")}\n\n${t(language, "export.empty")}`;
 
   // Export-Dateiname mit Datum
   const dateStr = new Date().toISOString().slice(0, 10);

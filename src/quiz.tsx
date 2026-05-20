@@ -10,7 +10,7 @@ import {
   Toast,
   useNavigation,
 } from "@raycast/api";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Flashcard, Preferences } from "./types";
 import { getAllCards, getAllTags, updateProgress } from "./utils/storage";
 import { t } from "./utils/i18n";
@@ -144,14 +144,31 @@ function MCCardQuiz({
         {(card.options ?? []).map((opt) => (
           <List.Item
             key={opt.id}
-            icon={{ source: getOptionIcon(opt.id), tintColor: getOptionColor(opt.id) }}
+            icon={{
+              source: getOptionIcon(opt.id),
+              tintColor: getOptionColor(opt.id),
+            }}
             title={`${opt.id}. ${opt.text}`}
             accessories={
               isAnswered && opt.id === card.correctOption
-                ? [{ tag: { value: t(language, "correct.msg").replace("!", ""), color: Color.Green } }]
+                ? [
+                    {
+                      tag: {
+                        value: t(language, "correct.msg").replace("!", ""),
+                        color: Color.Green,
+                      },
+                    },
+                  ]
                 : isAnswered && opt.id === selected
-                ? [{ tag: { value: t(language, "wrong.msg").replace("!", ""), color: Color.Red } }]
-                : []
+                  ? [
+                      {
+                        tag: {
+                          value: t(language, "wrong.msg").replace("!", ""),
+                          color: Color.Red,
+                        },
+                      },
+                    ]
+                  : []
             }
             actions={
               <ActionPanel>
@@ -178,7 +195,13 @@ function MCCardQuiz({
 
 // ── Quiz-Session ──────────────────────────────────────────────────────────────
 
-function QuizSession({ cards, language }: { cards: Flashcard[]; language: string }) {
+function QuizSession({
+  cards,
+  language,
+}: {
+  cards: Flashcard[];
+  language: string;
+}) {
   const [queue] = useState(() => shuffle(cards));
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState({ correct: 0, wrong: 0 });
@@ -189,7 +212,11 @@ function QuizSession({ cards, language }: { cards: Flashcard[]; language: string
 
   async function handleAnswer(correct: boolean) {
     await updateProgress(card.id, correct ? "correct" : "wrong");
-    setResults((r) => ({ ...r, correct: r.correct + (correct ? 1 : 0), wrong: r.wrong + (correct ? 0 : 1) }));
+    setResults((r) => ({
+      ...r,
+      correct: r.correct + (correct ? 1 : 0),
+      wrong: r.wrong + (correct ? 0 : 1),
+    }));
 
     await showToast({
       style: correct ? Toast.Style.Success : Toast.Style.Failure,
@@ -227,7 +254,11 @@ function QuizSession({ cards, language }: { cards: Flashcard[]; language: string
         markdown={summaryMd}
         actions={
           <ActionPanel>
-            <Action title={t(language, "back")} icon={Icon.ArrowLeft} onAction={pop} />
+            <Action
+              title={t(language, "back")}
+              icon={Icon.ArrowLeft}
+              onAction={pop}
+            />
           </ActionPanel>
         }
       />
@@ -238,9 +269,23 @@ function QuizSession({ cards, language }: { cards: Flashcard[]; language: string
 
   // key={card.id} erzwingt ein Neu-Mounten bei Kartenwechsel → alle States werden zurückgesetzt
   return card.type === "standard" ? (
-    <StandardCardQuiz key={card.id} card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
+    <StandardCardQuiz
+      key={card.id}
+      card={card}
+      index={index}
+      total={queue.length}
+      language={language}
+      onAnswer={handleAnswer}
+    />
   ) : (
-    <MCCardQuiz key={card.id} card={card} index={index} total={queue.length} language={language} onAnswer={handleAnswer} />
+    <MCCardQuiz
+      key={card.id}
+      card={card}
+      index={index}
+      total={queue.length}
+      language={language}
+      onAnswer={handleAnswer}
+    />
   );
 }
 
@@ -293,7 +338,11 @@ function TagSelector({
     >
       <List.Section
         title={t(language, "select.multiple")}
-        subtitle={selected.size === 0 ? t(language, "all") : `${selected.size} ${t(language, "selected")}`}
+        subtitle={
+          selected.size === 0
+            ? t(language, "all")
+            : `${selected.size} ${t(language, "selected")}`
+        }
       >
         {tags.map((tag, i) => {
           const isSelected = selected.has(tag);
@@ -303,7 +352,11 @@ function TagSelector({
           return (
             <List.Item
               key={tag}
-              icon={isSelected ? { source: Icon.CheckCircle, tintColor: Color.Blue } : Icon.Circle}
+              icon={
+                isSelected
+                  ? { source: Icon.CheckCircle, tintColor: Color.Blue }
+                  : Icon.Circle
+              }
               title={`#${tag}`}
               accessories={[
                 { text: `${count}` },
@@ -313,15 +366,17 @@ function TagSelector({
                 <ActionPanel>
                   {/* Primäre Aktion: Quiz starten (Enter) */}
                   <Action
-                    title={
-                      `${t(language, "start.quiz")} (${selected.size === 0 ? t(language, "all").toLowerCase() : selected.size + " " + t(language, "tags")})`
-                    }
+                    title={`${t(language, "start.quiz")} (${selected.size === 0 ? t(language, "all").toLowerCase() : selected.size + " " + t(language, "tags")})`}
                     icon={Icon.Play}
                     onAction={startQuiz}
                   />
                   {/* Tag an-/abwählen (für fokussiertes Item ohne Shortcut) */}
                   <Action
-                    title={isSelected ? t(language, "deselect") : t(language, "select")}
+                    title={
+                      isSelected
+                        ? t(language, "deselect")
+                        : t(language, "select")
+                    }
                     icon={isSelected ? Icon.CheckCircle : Icon.Circle}
                     onAction={() => toggleTag(tag)}
                   />
@@ -330,7 +385,11 @@ function TagSelector({
                     <Action
                       key={tg}
                       title={`${selected.has(tg) ? "✓ " : ""}#${tg}`}
-                      icon={selected.has(tg) ? { source: Icon.CheckCircle, tintColor: Color.Blue } : Icon.Circle}
+                      icon={
+                        selected.has(tg)
+                          ? { source: Icon.CheckCircle, tintColor: Color.Blue }
+                          : Icon.Circle
+                      }
                       shortcut={{ modifiers: ["cmd"], key: shortcutKeys[j] }}
                       onAction={() => toggleTag(tg)}
                     />
@@ -390,7 +449,10 @@ function ModeSelector({
 
   function startAll() {
     if (allCards.length === 0) {
-      showToast({ style: Toast.Style.Failure, title: t(language, "no.cards.avail") });
+      showToast({
+        style: Toast.Style.Failure,
+        title: t(language, "no.cards.avail"),
+      });
       return;
     }
     push(<QuizSession cards={allCards} language={language} />);
@@ -449,7 +511,11 @@ function ModeSelector({
             actions={
               <ActionPanel>
                 {/* Primäre Aktion (Enter) für den fokussierten Eintrag */}
-                <Action title={mode.actionTitle} icon={mode.actionIcon} onAction={mode.onAction} />
+                <Action
+                  title={mode.actionTitle}
+                  icon={mode.actionIcon}
+                  onAction={mode.onAction}
+                />
                 {/* Alle anderen Shortcuts, damit ⌘1-⌘4 von jedem Eintrag aus funktionieren */}
                 {modes
                   .filter((_, j) => j !== i)
@@ -518,7 +584,15 @@ export default function Quiz() {
           <Action
             title={t(language, "start.quiz")}
             icon={Icon.Play}
-            onAction={() => push(<ModeSelector allCards={allCards} tags={tags} language={language} />)}
+            onAction={() =>
+              push(
+                <ModeSelector
+                  allCards={allCards}
+                  tags={tags}
+                  language={language}
+                />,
+              )
+            }
           />
         </ActionPanel>
       }

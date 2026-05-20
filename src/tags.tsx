@@ -25,7 +25,15 @@ function cardDetailMarkdown(card: Flashcard, language: string): string {
   return `## ${t(language, "options")}\n\n${lines.join("\n\n")}`;
 }
 
-function CardsForTag({ tag, cards, language }: { tag: string; cards: Flashcard[]; language: string }) {
+function CardsForTag({
+  tag,
+  cards,
+  language,
+}: {
+  tag: string;
+  cards: Flashcard[];
+  language: string;
+}) {
   const filtered = cards.filter((c) => c.tags.includes(tag));
 
   return (
@@ -46,10 +54,12 @@ function CardsForTag({ tag, cards, language }: { tag: string; cards: Flashcard[]
               card.progress === "correct"
                 ? { tag: { value: "✓", color: Color.Green } }
                 : card.progress === "wrong"
-                ? { tag: { value: "✗", color: Color.Red } }
-                : { tag: { value: "·", color: Color.SecondaryText } },
+                  ? { tag: { value: "✗", color: Color.Red } }
+                  : { tag: { value: "·", color: Color.SecondaryText } },
             ]}
-            detail={<List.Item.Detail markdown={cardDetailMarkdown(card, language)} />}
+            detail={
+              <List.Item.Detail markdown={cardDetailMarkdown(card, language)} />
+            }
           />
         ))
       )}
@@ -118,7 +128,13 @@ export default function Tags() {
                       title={t(language, "show.cards")}
                       icon={Icon.ArrowRight}
                       onAction={() =>
-                        push(<CardsForTag tag={tag} cards={cards} language={language} />)
+                        push(
+                          <CardsForTag
+                            tag={tag}
+                            cards={cards}
+                            language={language}
+                          />,
+                        )
                       }
                     />
                   </ActionPanel>
@@ -143,10 +159,12 @@ export default function Tags() {
                           <CardsForTag
                             tag={"__untagged__"}
                             cards={cards.map((c) =>
-                              c.tags.length === 0 ? { ...c, tags: ["__untagged__"] } : c
+                              c.tags.length === 0
+                                ? { ...c, tags: ["__untagged__"] }
+                                : c,
                             )}
                             language={language}
-                          />
+                          />,
                         )
                       }
                     />

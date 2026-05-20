@@ -24,7 +24,9 @@ export default function EditTags({ card, onSaved }: Props) {
   const { pop } = useNavigation();
 
   // Tags mit # vorformatiert als Standardwert anzeigen
-  const [tagInput, setTagInput] = useState(card.tags.map((tg) => `#${tg}`).join(" "));
+  const [tagInput, setTagInput] = useState(
+    card.tags.map((tg) => `#${tg}`).join(" "),
+  );
   const [existingTags, setExistingTags] = useState<string[]>([]);
 
   // Bereits verwendete Tags aus dem Storage laden (als Vorschläge)
@@ -43,14 +45,17 @@ export default function EditTags({ card, onSaved }: Props) {
     // Tags aus der Eingabe parsen – Leerzeichen- oder Komma-getrennt, mit oder ohne #
     // Normalisierung: Kleinschreibung + Duplikate entfernen
     const raw = values.tags.trim();
-    const parsed: string[] = raw.length === 0
-      ? []
-      : [...new Set(
-          raw
-            .split(/[\s,]+/)
-            .map((tg) => tg.replace(/^#/, "").trim().toLowerCase())
-            .filter(Boolean)
-        )];
+    const parsed: string[] =
+      raw.length === 0
+        ? []
+        : [
+            ...new Set(
+              raw
+                .split(/[\s,]+/)
+                .map((tg) => tg.replace(/^#/, "").trim().toLowerCase())
+                .filter(Boolean),
+            ),
+          ];
 
     const updated: Flashcard = { ...card, tags: parsed };
 
@@ -95,10 +100,7 @@ export default function EditTags({ card, onSaved }: Props) {
       }
     >
       {/* Karten-Vorschau */}
-      <Form.Description
-        title={t(language, "card.title")}
-        text={card.front}
-      />
+      <Form.Description title={t(language, "card.title")} text={card.front} />
       <Form.Separator />
 
       {/* Tag-Eingabe */}

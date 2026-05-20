@@ -23,11 +23,21 @@ import { CardType, Flashcard, Option, Preferences } from "../types";
  * Leerzeilen zwischen den Abschnitten sind optional.
  * Tags werden automatisch auf Kleinschreibung normalisiert.
  */
-export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" | "createdAt"> {
+export function parseMarkdown(
+  input: string,
+): Omit<Flashcard, "id" | "progress" | "createdAt"> {
   const { language } = getPreferenceValues<Preferences>();
   const keywords: Record<string, string> = {
-    de: "richtig", en: "true", es: "correcto", zh: "正确", hi: "सही",
-    ru: "правильно", ar: "صحيح", pt: "correto", it: "corretto", tr: "doğru"
+    de: "richtig",
+    en: "true",
+    es: "correcto",
+    zh: "正确",
+    hi: "सही",
+    ru: "правильно",
+    ar: "صحيح",
+    pt: "correto",
+    it: "corretto",
+    tr: "doğru",
   };
   const correctKeyword = keywords[language] || "true";
 
@@ -40,7 +50,9 @@ export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" 
   const lastLine = lines[lines.length - 1]?.trim() ?? "";
   // Unicode-taugliches Regex: erkennt auch Umlaute, Akzente etc. in Tags
   if (/^(#[\p{L}\p{N}_]+\s*)+$/u.test(lastLine)) {
-    tags = (lastLine.match(/#([\p{L}\p{N}_]+)/gu) ?? []).map((t) => t.slice(1).toLowerCase());
+    tags = (lastLine.match(/#([\p{L}\p{N}_]+)/gu) ?? []).map((t) =>
+      t.slice(1).toLowerCase(),
+    );
     contentLines = lines.slice(0, -1);
   }
 
@@ -54,7 +66,10 @@ export function parseMarkdown(input: string): Omit<Flashcard, "id" | "progress" 
   }
 }
 
-function parseStandard(content: string, tags: string[]): Omit<Flashcard, "id" | "progress" | "createdAt"> {
+function parseStandard(
+  content: string,
+  tags: string[],
+): Omit<Flashcard, "id" | "progress" | "createdAt"> {
   // Teilen an == – mit oder ohne Leerzeilen darum
   const parts = content.split(/\n[\t ]*==[\t ]*\n/);
   const front = parts[0]?.trim() ?? "";
@@ -71,7 +86,7 @@ function parseStandard(content: string, tags: string[]): Omit<Flashcard, "id" | 
 function parseMC(
   content: string,
   tags: string[],
-  correctKeyword: string
+  correctKeyword: string,
 ): Omit<Flashcard, "id" | "progress" | "createdAt"> {
   // Teilen an ==< – mit oder ohne Leerzeilen darum
   const [frontPart, rest] = content.split(/\n[\t ]*==<[\t ]*\n/);
@@ -96,7 +111,9 @@ function parseMC(
   const correctMatch = (correctPart ?? "")
     .trim()
     .match(new RegExp(`^${correctKeyword}:\\s*(\\d+)`, "im"));
-  const correctOption = correctMatch ? parseInt(correctMatch[1], 10) : undefined;
+  const correctOption = correctMatch
+    ? parseInt(correctMatch[1], 10)
+    : undefined;
 
   return {
     type: "multiple-choice" as CardType,
@@ -114,7 +131,9 @@ function parseMC(
  * Der Platzhalter "-" (= keine Tags) wird vor dem Parsen entfernt.
  * Leere Blöcke werden übersprungen.
  */
-export function parseMultipleCards(input: string): Omit<Flashcard, "id" | "progress" | "createdAt">[] {
+export function parseMultipleCards(
+  input: string,
+): Omit<Flashcard, "id" | "progress" | "createdAt">[] {
   // An --- Trennlinien aufteilen (nur wenn --- allein auf einer Zeile steht)
   const blocks = input.split(/\n[ \t]*---[ \t]*\n/);
 

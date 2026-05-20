@@ -53,8 +53,16 @@ function cardToMarkdown(card: Flashcard, correctKeyword: string): string {
 export function cardsToMarkdown(cards: Flashcard[], language: string): string {
   // Sprachabhängiges Keyword für "richtig"/"true" etc.
   const keywords: Record<string, string> = {
-    de: "richtig", en: "true", es: "correcto", zh: "正确", hi: "सही",
-    ru: "правильно", ar: "صحيح", pt: "correto", it: "corretto", tr: "doğru",
+    de: "richtig",
+    en: "true",
+    es: "correcto",
+    zh: "正确",
+    hi: "सही",
+    ru: "правильно",
+    ar: "صحيح",
+    pt: "correto",
+    it: "corretto",
+    tr: "doğru",
   };
   const correctKeyword = keywords[language] || "true";
 

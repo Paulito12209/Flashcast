@@ -1,4 +1,13 @@
-import { Form, ActionPanel, Action, showToast, Toast, getPreferenceValues, Icon, popToRoot } from "@raycast/api";
+import {
+  Form,
+  ActionPanel,
+  Action,
+  showToast,
+  Toast,
+  getPreferenceValues,
+  Icon,
+  popToRoot,
+} from "@raycast/api";
 import { parseMarkdown } from "./utils/parser";
 import { saveCard } from "./utils/storage";
 import { Flashcard, Preferences } from "./types";

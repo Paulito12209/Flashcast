@@ -5,6 +5,10 @@
   "description": "Create and study flashcards with Markdown syntax",
   "icon": "extension-icon.png",
   "author": "Paul12169",
+  "platforms": [
+    "macOS",
+    "Windows"
+  ],
   "categories": ["Productivity", "Other"],
   "license": "MIT",
   "commands": [

@@ -34,12 +34,21 @@ function cardDetailMarkdown(card: Flashcard, language: string): string {
 
 function progressAccessory(card: Flashcard, language: string) {
   if (card.progress === "correct") {
-    return { tag: { value: "✓", color: Color.Green }, tooltip: t(language, "answered.correct") };
+    return {
+      tag: { value: "✓", color: Color.Green },
+      tooltip: t(language, "answered.correct"),
+    };
   }
   if (card.progress === "wrong") {
-    return { tag: { value: "✗", color: Color.Red }, tooltip: t(language, "answered.wrong") };
+    return {
+      tag: { value: "✗", color: Color.Red },
+      tooltip: t(language, "answered.wrong"),
+    };
   }
-  return { tag: { value: "·", color: Color.SecondaryText }, tooltip: t(language, "not.quizzed") };
+  return {
+    tag: { value: "·", color: Color.SecondaryText },
+    tooltip: t(language, "not.quizzed"),
+  };
 }
 
 export default function ListCards() {
@@ -69,7 +78,10 @@ export default function ListCards() {
     });
     if (confirmed) {
       await deleteCard(card.id);
-      await showToast({ style: Toast.Style.Success, title: t(language, "deleted") });
+      await showToast({
+        style: Toast.Style.Success,
+        title: t(language, "deleted"),
+      });
       loadCards();
     }
   }
@@ -115,8 +127,11 @@ export default function ListCards() {
             icon={typeIcon(card)}
             title={card.front}
             accessories={[
+              progressAccessory(card, language),
               ...(card.tags.length > 0 ? [{ tag: `#${card.tags[0]}` }] : []),
-              ...(card.tags.length > 1 ? [{ text: `+${card.tags.length - 1}` }] : []),
+              ...(card.tags.length > 1
+                ? [{ text: `+${card.tags.length - 1}` }]
+                : []),
             ]}
             detail={
               <List.Item.Detail
@@ -125,7 +140,11 @@ export default function ListCards() {
                   <List.Item.Detail.Metadata>
                     <List.Item.Detail.Metadata.Label
                       title={t(language, "type")}
-                      text={card.type === "standard" ? t(language, "standard") : t(language, "mc")}
+                      text={
+                        card.type === "standard"
+                          ? t(language, "standard")
+                          : t(language, "mc")
+                      }
                     />
                     <List.Item.Detail.Metadata.Label
                       title={t(language, "status")}
@@ -133,21 +152,28 @@ export default function ListCards() {
                         card.progress === "correct"
                           ? t(language, "status.correct")
                           : card.progress === "wrong"
-                          ? t(language, "status.wrong")
-                          : t(language, "status.new")
+                            ? t(language, "status.wrong")
+                            : t(language, "status.new")
                       }
                     />
                     {card.tags.length > 0 && (
                       <List.Item.Detail.Metadata.TagList title="Tags">
                         {card.tags.map((tg) => (
-                          <List.Item.Detail.Metadata.TagList.Item key={tg} text={`#${tg}`} />
+                          <List.Item.Detail.Metadata.TagList.Item
+                            key={tg}
+                            text={`#${tg}`}
+                          />
                         ))}
                       </List.Item.Detail.Metadata.TagList>
                     )}
                     <List.Item.Detail.Metadata.Separator />
                     <List.Item.Detail.Metadata.Label
                       title={t(language, "created")}
-                      text={new Date(card.createdAt).toLocaleDateString(language === "en" ? "en-US" : language + "-" + language.toUpperCase())}
+                      text={new Date(card.createdAt).toLocaleDateString(
+                        language === "en"
+                          ? "en-US"
+                          : language + "-" + language.toUpperCase(),
+                      )}
                     />
                   </List.Item.Detail.Metadata>
                 }

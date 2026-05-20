@@ -19,7 +19,10 @@ export default function ImportCards() {
   const { language } = getPreferenceValues<Preferences>();
   const [mode, setMode] = useState<string>("paste");
 
-  async function handleSubmit(values: { markdown?: string; filePath?: string[] }) {
+  async function handleSubmit(values: {
+    markdown?: string;
+    filePath?: string[];
+  }) {
     let input = "";
 
     if (mode === "paste") {

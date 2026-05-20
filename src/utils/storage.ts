@@ -26,7 +26,10 @@ export async function saveCard(card: Flashcard): Promise<void> {
 
 export async function deleteCard(id: string): Promise<void> {
   const cards = await getAllCards();
-  await LocalStorage.setItem(CARDS_KEY, JSON.stringify(cards.filter((c) => c.id !== id)));
+  await LocalStorage.setItem(
+    CARDS_KEY,
+    JSON.stringify(cards.filter((c) => c.id !== id)),
+  );
 }
 
 /** Löscht alle gespeicherten Karteikarten. */
@@ -34,7 +37,10 @@ export async function deleteAllCards(): Promise<void> {
   await LocalStorage.setItem(CARDS_KEY, JSON.stringify([]));
 }
 
-export async function updateProgress(id: string, progress: "correct" | "wrong"): Promise<void> {
+export async function updateProgress(
+  id: string,
+  progress: "correct" | "wrong",
+): Promise<void> {
   const cards = await getAllCards();
   const card = cards.find((c) => c.id === id);
   if (card) {

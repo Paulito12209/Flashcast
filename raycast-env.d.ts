@@ -7,10 +7,7 @@
 
 /* eslint-disable @typescript-eslint/ban-types */
 
-type ExtensionPreferences = {
-  /** Language - Language of the extension (affects syntax for correct/true) */
-  "language": "de" | "en" | "es" | "zh" | "hi" | "ru" | "ar" | "pt" | "it" | "tr"
-}
+type ExtensionPreferences = {}
 
 /** Preferences accessible in all the extension's commands */
 declare type Preferences = ExtensionPreferences
